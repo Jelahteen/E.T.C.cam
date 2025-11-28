@@ -3,3 +3,5 @@ static/img/ar_models/eggplant.glb filter=lfs diff=lfs merge=lfs -text
 static/img/ar_models/chili_pepper.glb filter=lfs diff=lfs merge=lfs -text
 ar_visualization/static/ar_models/*.glb filter=lfs diff=lfs merge=lfs -text
 static/img/ar_models/*.glb filter=lfs diff=lfs merge=lfs -text
+detection/models/*.keras filter=lfs diff=lfs merge=lfs -text
+detection/models/*.pth filter=lfs diff=lfs merge=lfs -text
