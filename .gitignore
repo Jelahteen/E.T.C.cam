@@ -22,18 +22,17 @@ env/
 .vscode/
 .idea/
 
-# OS files
+# OS filesgit add detection/models/*.keras
 .DS_Store
 Thumbs.db
 
-# Model files (large)
-*.keras
-*.h5
+# # Model files (large)
+# *.keras
+# *.h5
 
-# Dataset / Uploads
-scans/
-uploads/
-detection/models/
+# # Dataset / Uploads
+# scans/
+# uploads/
 
 # Compiled translation files
-*.mo
+# *.mo
