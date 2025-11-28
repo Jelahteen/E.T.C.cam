@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual environments
+env/
+venv/
+etc_cam_env/
+
+# Django static/media
+media/
+staticfiles/
+
+# IDE stuff
+.vscode/
+.idea/
+
+# Machine learning model files
+*.pth
+*.pt
+*.h5
+*.onnx
+*.tflite
+
+# Temporary files
+*.log
+*.tmp
