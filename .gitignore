@@ -1,37 +1,39 @@
 # Python
 __pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
 *.pyc
 
-# Virtual environments
-env/
-venv/
-etc_cam_env/
-
-# Django static (collected)
-staticfiles/
-
-# Django media uploads
+# Django
+db.sqlite3
+*.log
 media/
-temp_uploads/
-scans/
+staticfiles/
+local_settings.py
 
-# IDE and editor files
+# Virtual environment
+venv/
+env/
+.venv/
+
+# IDE settings
 .vscode/
 .idea/
-*.log
-*.tmp
 
-# Machine learning model files
-*.pth
-*.pt
-*.h5
-*.onnx
-*.tflite
+# OS files
+.DS_Store
+Thumbs.db
+
+# Model files (large)
 *.keras
+*.h5
 
-# 3D models (AR)
-*.glb
+# Dataset / Uploads
+scans/
+uploads/
+detection/models/
 
-# Node/npm (if ever used)
-node_modules/
-
+# Compiled translation files
+*.mo
