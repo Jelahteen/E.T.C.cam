@@ -7,13 +7,19 @@ env/
 venv/
 etc_cam_env/
 
-# Django static/media
-media/
+# Django static (collected)
 staticfiles/
 
-# IDE stuff
+# Django media uploads
+media/
+temp_uploads/
+scans/
+
+# IDE and editor files
 .vscode/
 .idea/
+*.log
+*.tmp
 
 # Machine learning model files
 *.pth
@@ -21,7 +27,11 @@ staticfiles/
 *.h5
 *.onnx
 *.tflite
+*.keras
 
-# Temporary files
-*.log
-*.tmp
+# 3D models (AR)
+*.glb
+
+# Node/npm (if ever used)
+node_modules/
+
