@@ -1,0 +1,502 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>AR Crop Viewer - E.T.C. CAM</title>
+    <link rel="icon" type="image/png" href="{% static 'img/ETC_LOGO2.png' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/examples/js/loaders/GLTFLoader.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            font-family: 'Inter', sans-serif;
+            background: #000000;
+        }
+        #ar-container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            cursor: grab;
+        }
+        #ar-canvas {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+        #camera-feed-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+            transform: scaleX(-1);
+            -webkit-transform: scaleX(-1);
+        }
+        
+        /* Minimalist Controls */
+        #controls {
+            position: absolute;
+            bottom: 30px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            z-index: 10;
+        }
+        .control-btn {
+            background: rgba(255, 255, 255, 0.95);
+            border: 2px solid #00ff00;
+            color: #000000;
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 255, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        .control-btn:hover {
+            background: #00ff00;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 255, 0, 0.5);
+        }
+        .control-btn.active {
+            background: #00ff00;
+            color: #000000;
+        }
+        
+        /* Loading */
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00ff00;
+            font-size: 18px;
+            text-align: center;
+            background: rgba(0, 0, 0, 0.8);
+            padding: 20px 30px;
+            border-radius: 12px;
+            border: 2px solid #00ff00;
+            z-index: 10;
+            backdrop-filter: blur(10px);
+        }
+        
+        /* Labels */
+        .model-label {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.95);
+            color: #000000;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            border: 2px solid #00ff00;
+            max-width: 200px;
+            min-width: 150px;
+            box-shadow: 0 4px 20px rgba(0, 255, 0, 0.3);
+            backdrop-filter: blur(10px);
+            z-index: 6;
+        }
+        .label-title {
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #000000;
+            font-size: 13px;
+            border-bottom: 1px solid #00ff00;
+            padding-bottom: 4px;
+        }
+        .label-diseases {
+            font-size: 11px;
+            color: #ff0000;
+        }
+        .label-disease-item {
+            margin: 3px 0;
+            padding-left: 8px;
+            position: relative;
+        }
+        .label-disease-item:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #ff0000;
+        }
+        
+        /* Arrows */
+        .label-arrow {
+            position: absolute;
+            background: #00ff00;
+            height: 2px;
+            box-shadow: 0 0 10px #00ff00;
+            transform-origin: left center;
+            z-index: 5;
+            transition: opacity 0.3s ease;
+        }
+        .label-arrow::after {
+            content: '';
+            position: absolute;
+            right: -6px;
+            top: -4px;
+            width: 0;
+            height: 0;
+            border-left: 6px solid #00ff00;
+            border-top: 5px solid transparent;
+            border-bottom: 5px solid transparent;
+        }
+        
+        /* Back Button */
+        #back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+    <div id="ar-container">
+        <video id="camera-feed-video" autoplay playsinline></video>
+        <canvas id="ar-canvas"></canvas>
+        
+        <!-- Back Button -->
+        <div class="control-btn" id="back-btn" title="Back to selection">
+            <i class="fas fa-arrow-left" style="color: #000000;"></i>
+        </div>
+        
+        <!-- Labels Container -->
+        <div id="labels-container"></div>
+        
+        <!-- Controls -->
+        <div id="controls">
+            <div class="control-btn" id="rotate-btn" title="Toggle Auto Rotate">
+                <i class="fas fa-sync-alt" style="color: #000000;"></i>
+            </div>
+            <div class="control-btn" id="scale-btn" title="Zoom in/out">
+                <i class="fas fa-search" style="color: #000000;"></i>
+            </div>
+        </div>
+        
+        <div id="loading">
+            <i class="fas fa-spinner fa-spin"></i>
+            <p>Loading 3D Model...</p>
+        </div>
+    </div>
+
+    <script>
+        // AR Variables
+        let scene, camera, renderer;
+        let cropModel = null;
+        let selectedCrop = localStorage.getItem('selectedCrop');
+        let isRotating = false;
+        let currentScale = 0.5;
+        let modelInfo = null;
+        let isDragging = false;
+        let previousMousePosition = { x: 0, y: 0 };
+        let cameraStream = null;
+        let labels = [];
+        let isUserInteracting = false;
+        let interactionTimeout = null;
+
+        // DOM Elements
+        const arContainer = document.getElementById('ar-container');
+        const arCanvas = document.getElementById('ar-canvas');
+        const cameraFeedVideo = document.getElementById('camera-feed-video');
+        const loadingEl = document.getElementById('loading');
+        const backBtn = document.getElementById('back-btn');
+        const rotateBtn = document.getElementById('rotate-btn');
+        const scaleBtn = document.getElementById('scale-btn');
+        const labelsContainer = document.getElementById('labels-container');
+
+        // Function to start the camera feed
+        async function startCameraFeed() {
+            try {
+                cameraStream = await navigator.mediaDevices.getUserMedia({
+                    video: { facingMode: 'environment' }
+                });
+                cameraFeedVideo.srcObject = cameraStream;
+                cameraFeedVideo.play();
+            } catch (error) {
+                console.error("Error accessing camera:", error);
+                try {
+                    cameraStream = await navigator.mediaDevices.getUserMedia({
+                        video: { facingMode: 'user' }
+                    });
+                    cameraFeedVideo.srcObject = cameraStream;
+                    cameraFeedVideo.play();
+                } catch (userError) {
+                    console.error("Error accessing user-facing camera:", userError);
+                    alert("Camera access required for AR features.");
+                    window.location.href = "{% url 'ar_visualization:ar_page' %}";
+                }
+            }
+        }
+
+        // Initialize Three.js scene
+        function initScene() {
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+            renderer = new THREE.WebGLRenderer({
+                canvas: arCanvas,
+                antialias: true,
+                alpha: true
+            });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setClearColor(0x000000, 0);
+
+            // Add lighting
+            const ambientLight = new THREE.AmbientLight(0x606060);
+            scene.add(ambientLight);
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1).normalize();
+            scene.add(directionalLight);
+
+            camera.position.z = 2;
+            renderer.setAnimationLoop(render);
+        }
+
+        // Load label data from backend
+        async function loadLabelData() {
+            try {
+                const response = await fetch(`/ar_visualization/get_crop_labels/${selectedCrop}/`);
+                if (response.ok) {
+                    return await response.json();
+                }
+            } catch (error) {
+                console.error("Error loading label data:", error);
+            }
+            return { parts: [] };
+        }
+
+        // Create labels and arrows
+        async function createLabels() {
+            labelsContainer.innerHTML = '';
+            labels = [];
+
+            const labelData = await loadLabelData();
+            const parts = labelData.parts || [];
+            
+            parts.forEach((part, index) => {
+                // Create label
+                const labelElement = document.createElement('div');
+                labelElement.className = 'model-label';
+                labelElement.id = `label-${index}`;
+                labelElement.style.left = part.labelPosition.x + 'px';
+                labelElement.style.top = part.labelPosition.y + 'px';
+                labelElement.innerHTML = `
+                    <div class="label-title">${part.name}</div>
+                    <div class="label-diseases">
+                        ${part.diseases.map(disease => 
+                            `<div class="label-disease-item">${disease}</div>`
+                        ).join('')}
+                    </div>
+                `;
+                labelsContainer.appendChild(labelElement);
+
+                // Create arrow
+                const arrowElement = document.createElement('div');
+                arrowElement.className = 'label-arrow';
+                arrowElement.id = `arrow-${index}`;
+                labelsContainer.appendChild(arrowElement);
+
+                labels.push({
+                    label: labelElement,
+                    arrow: arrowElement,
+                    targetPosition: part.targetPosition,
+                    labelPosition: part.labelPosition
+                });
+            });
+        }
+
+        // Update arrow positions
+        function updateArrows() {
+            if (!cropModel || isUserInteracting) {
+                // Hide arrows during interaction
+                labels.forEach(label => {
+                    label.arrow.style.opacity = '0';
+                });
+                return;
+            }
+
+            labels.forEach((label) => {
+                const worldPosition = new THREE.Vector3(
+                    label.targetPosition.x,
+                    label.targetPosition.y,
+                    label.targetPosition.z
+                );
+                
+                // Transform to model's world position
+                cropModel.updateMatrixWorld();
+                worldPosition.applyMatrix4(cropModel.matrixWorld);
+                
+                // Convert 3D position to 2D screen position
+                const screenPosition = worldPosition.clone();
+                screenPosition.project(camera);
+                
+                const targetX = (screenPosition.x * 0.5 + 0.5) * window.innerWidth;
+                const targetY = (-(screenPosition.y * 0.5) + 0.5) * window.innerHeight;
+                
+                // Get label position
+                const labelRect = label.label.getBoundingClientRect();
+                const labelCenterX = labelRect.left + labelRect.width / 2;
+                const labelCenterY = labelRect.top + labelRect.height / 2;
+                
+                // Calculate direction and distance
+                const dx = targetX - labelCenterX;
+                const dy = targetY - labelCenterY;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+                const angle = Math.atan2(dy, dx);
+                
+                // Show arrow if target is visible
+                if (screenPosition.z < 1 && targetX > 0 && targetX < window.innerWidth && 
+                    targetY > 0 && targetY < window.innerHeight) {
+                    
+                    label.arrow.style.opacity = '1';
+                    label.arrow.style.left = labelCenterX + 'px';
+                    label.arrow.style.top = labelCenterY + 'px';
+                    label.arrow.style.width = distance + 'px';
+                    label.arrow.style.transform = `rotate(${angle}rad)`;
+                    
+                } else {
+                    label.arrow.style.opacity = '0';
+                }
+            });
+        }
+
+        // Handle user interaction
+        function startUserInteraction() {
+            isUserInteracting = true;
+            
+            // Clear existing timeout
+            if (interactionTimeout) {
+                clearTimeout(interactionTimeout);
+            }
+            
+            // Set timeout to show arrows after interaction stops
+            interactionTimeout = setTimeout(() => {
+                isUserInteracting = false;
+            }, 1000); // Show arrows 1 second after interaction stops
+        }
+
+        // Load the crop model
+        async function loadCropModel() {
+            try {
+                const response = await fetch(`/ar_visualization/get_crop_model/${selectedCrop}/`);
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                
+                modelInfo = await response.json();
+                if (!modelInfo?.model_url) throw new Error("Model information not found");
+
+                currentScale = modelInfo.scale || 0.5;
+
+                const loader = new THREE.GLTFLoader();
+                const gltf = await loader.loadAsync(modelInfo.model_url);
+                cropModel = gltf.scene;
+                cropModel.scale.set(currentScale, currentScale, currentScale);
+                scene.add(cropModel);
+
+                await createLabels();
+                loadingEl.style.display = 'none';
+
+            } catch (error) {
+                console.error("Error loading model:", error);
+                loadingEl.innerHTML = `<p>Error: ${error.message}</p>`;
+                setTimeout(() => {
+                    window.location.href = "{% url 'ar_visualization:ar_page' %}";
+                }, 3000);
+            }
+        }
+
+        // AR render loop
+        function render() {
+            if (cropModel && isRotating) {
+                cropModel.rotation.y += 0.01;
+            }
+            updateArrows();
+            renderer.render(scene, camera);
+        }
+
+        // Event Listeners
+        arContainer.addEventListener('mousedown', (event) => {
+            isDragging = true;
+            startUserInteraction();
+            arContainer.style.cursor = 'grabbing';
+            previousMousePosition = { x: event.clientX, y: event.clientY };
+        });
+
+        arContainer.addEventListener('mousemove', (event) => {
+            if (!isDragging || !cropModel) return;
+            
+            const deltaMove = {
+                x: event.clientX - previousMousePosition.x,
+                y: event.clientY - previousMousePosition.y
+            };
+            
+            cropModel.rotation.y += deltaMove.x * 0.005;
+            cropModel.rotation.x += deltaMove.y * 0.0025;
+            previousMousePosition = { x: event.clientX, y: event.clientY };
+            
+            startUserInteraction(); // Reset interaction timer
+        });
+
+        arContainer.addEventListener('mouseup', () => {
+            isDragging = false;
+            arContainer.style.cursor = 'grab';
+        });
+
+        backBtn.addEventListener('click', () => {
+            if (cameraStream) {
+                cameraStream.getTracks().forEach(track => track.stop());
+            }
+            window.location.href = "{% url 'ar_visualization:ar_page' %}";
+        });
+        
+        rotateBtn.addEventListener('click', () => {
+            isRotating = !isRotating;
+            rotateBtn.classList.toggle('active', isRotating);
+        });
+
+        scaleBtn.addEventListener('click', () => {
+            currentScale = currentScale === (modelInfo.scale || 0.5) ? 
+                (modelInfo.scale * 1.5 || 0.8) : (modelInfo.scale || 0.5);
+            if (cropModel) {
+                cropModel.scale.set(currentScale, currentScale, currentScale);
+            }
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', async () => {
+            if (selectedCrop) {
+                await startCameraFeed();
+                initScene();
+                loadCropModel();
+            } else {
+                window.location.href = "{% url 'ar_visualization:ar_page' %}";
+            }
+        });
+    </script>
+</body>
+</html>

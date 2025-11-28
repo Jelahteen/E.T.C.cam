@@ -1,0 +1,613 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-08-31 19:36+0800\n"
+"PO-Revision-Date: 2025-08-25 15:15+0800\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: Filipino <tl@li.org>\n"
+"Language: tl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: .\ar_visualization\templates\ar_visualization\ARpage.html:8
+msgid "AR Visualization"
+msgstr "AR na Visualization"
+
+#: .\ar_visualization\templates\ar_visualization\ARpage.html:175
+#: .\core\templates\core\list_page.html:170
+#: .\detection\templates\detection\Scanpage.html:360
+msgid "Back to Dashboard"
+msgstr "Bumalik sa Dashboard"
+
+#: .\ar_visualization\templates\ar_visualization\ARpage.html:186
+msgid "AUGMENTED REALITY"
+msgstr "AUGMENTED REALITY"
+
+#: .\ar_visualization\templates\ar_visualization\ARpage.html:187
+msgid "SELECT A CROP TO VISUALIZE IN 3D"
+msgstr "PUMILI NG PANANIM UPANG MAKITA SA 3D"
+
+#: .\ar_visualization\templates\ar_visualization\ARpage.html:195
+#: ⁨.\core\templates\core\dashboard page.html⁩:623
+#: .\detection\templates\detection\Scanpage.html:410
+msgid "Eggplant"
+msgstr "Talong"
+
+#: .\ar_visualization\templates\ar_visualization\ARpage.html:196
+#: .\ar_visualization\templates\ar_visualization\ARpage.html:205
+#: .\ar_visualization\templates\ar_visualization\ARpage.html:214
+msgid "View 3D model in AR"
+msgstr "Tingnan ang 3D model sa AR"
+
+#: .\ar_visualization\templates\ar_visualization\ARpage.html:204
+#: ⁨.\core\templates\core\dashboard page.html⁩:632
+#: .\detection\templates\detection\Scanpage.html:411
+msgid "Tomato"
+msgstr "Kamatis"
+
+#: .\ar_visualization\templates\ar_visualization\ARpage.html:213
+#: .\detection\templates\detection\Scanpage.html:409
+msgid "Chili Pepper"
+msgstr "Sili"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:8
+msgid "Dashboard"
+msgstr "Dashboard"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:536
+#: .\detection\templates\detection\Scanpage.html:357
+msgid "ETC Logo"
+msgstr "Logo ng ETC"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:536
+#: ⁨.\core\templates\core\dashboard page.html⁩:712
+#: .\core\templates\core\homepage.html:8
+#: .\core\templates\core\homepage.html:271
+#: .\core\templates\core\loginpage.html:275
+#: .\core\templates\core\signuppage.html:269
+#: .\detection\templates\detection\Scanpage.html:357
+msgid "E.T.C CAM"
+msgstr "E.T.C CAM"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:541
+#: .\core\templates\core\homepage.html:221
+#: .\core\templates\core\homepage.html:248
+msgid "SERVICES"
+msgstr "MGA SERBISYO"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:542
+#: .\core\templates\core\homepage.html:222
+#: .\core\templates\core\homepage.html:249
+msgid "ABOUT"
+msgstr "TUNGKOL SA AMIN"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:547
+#: .\core\templates\core\homepage.html:227
+#: .\core\templates\core\homepage.html:254
+msgid "Language"
+msgstr "Wika"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:560
+msgid "LOGOUT"
+msgstr "MAG-LOGOUT"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:589
+msgid "Welcome to E.T.C CAM"
+msgstr "Maligayang Pagdating sa E.T.C CAM"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:590
+#: .\detection\templates\detection\Scanpage.html:372
+msgid "DETECT DISEASES OF EGGPLANT, TOMATO, OR CHILI PEPPER"
+msgstr "TUKUYIN ANG MGA SAKIT NG TALONG, KAMATIS, O SILI"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:594
+msgid "Our Services"
+msgstr "Mga Serbisyo"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:598
+msgid "AR"
+msgstr "AR"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:599
+msgid "Visualize Crops in 3D"
+msgstr "Tingnan ang mga Pananim sa 3D"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:600
+msgid "EXPLORE AR"
+msgstr "GAMITIN ANG AR"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:604
+msgid "SCAN"
+msgstr "MAG-SCAN"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:605
+msgid "Scan for Diseases"
+msgstr "I-scan para sa mga Sakit"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:606
+msgid "START SCAN"
+msgstr "MAGSIMULA NG PAG-SCAN"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:610
+msgid "LIST"
+msgstr "LISTAHAN"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:611
+#: .\core\templates\core\list_page.html:8
+msgid "List of Diseases"
+msgstr "Listahan ng mga Sakit"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:612
+msgid "VIEW LIST"
+msgstr "TINGNAN ANG LISTAHAN"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:619
+msgid "Scanned Disease History Visualization"
+msgstr "Historya ng mga na-scan na sakit"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:627
+#: ⁨.\core\templates\core\dashboard page.html⁩:636
+#: ⁨.\core\templates\core\dashboard page.html⁩:645
+msgid "View History"
+msgstr "Tingnan ang Historya"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:641
+msgid "Chili"
+msgstr "Sili"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:651
+msgid "About E.T.C CAM"
+msgstr "Tungkol sa E.T.C CAM"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:655
+#: .\core\templates\core\homepage.html:284
+msgid "3D Visualization"
+msgstr "3D na Larawan"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:656
+msgid ""
+"E.T.C Cam have a feature that allows users to visualize 3D version of the "
+"plant through their gadgets."
+msgstr ""
+"Ang E.T.C Cam ay may feature na nagpapahintulot sa mga user na i-visualize "
+"ang 3D na bersyon ng halaman sa pamamagitan ng kanilang mga gadget."
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:660
+#: .\core\templates\core\homepage.html:291
+msgid "Scan Diseases"
+msgstr "I-scan ang mga Sakit"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:661
+msgid ""
+"E.T.C Cam is designed and made to help farmers for faster scanning of "
+"diseases of eggplant, tomato, and chili pepper."
+msgstr ""
+"Ang E.T.C Cam ay dinisenyo at ginawa upang tulungan ang mga magsasaka para "
+"sa mas mabilis na pag-scan ng mga sakit ng talong, kamatis, at sili."
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:665
+msgid "Know More About the Diseases"
+msgstr "Alamin Pa ang Tungkol sa mga Sakit"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:666
+msgid ""
+"E.T.C Cam also provides a list of diseases for each crop for farmers to "
+"easily identify and get rid of the diseases."
+msgstr ""
+"Nagbibigay din ang E.T.C Cam ng listahan ng mga sakit para sa bawat pananim "
+"para madaling matukoy at maalis ng mga magsasaka ang mga sakit."
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:672
+msgid "Our Team"
+msgstr "Ang Aming Grupo"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:678
+#: .\core\templates\core\homepage.html:310
+msgid "Catherine Capillano"
+msgstr "Catherine Capillano"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:679
+#: .\core\templates\core\homepage.html:311
+msgid "UI/UX Designer, System Analyst"
+msgstr "UI/UX Designer, System Analyst"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:689
+#: .\core\templates\core\homepage.html:319
+msgid "Jelah Quintana"
+msgstr "Jelah Quintana"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:690
+#: .\core\templates\core\homepage.html:320
+msgid "UI/UX Designer, Lead Developer"
+msgstr "UI/UX Designer, Lead Developer"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:700
+#: .\core\templates\core\homepage.html:328
+msgid "Jake Byron Orense"
+msgstr "Jake Byron Orense"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:701
+#: .\core\templates\core\homepage.html:329
+msgid "System Analyst"
+msgstr "System Analyst"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:712
+msgid "All rights reserved."
+msgstr ""
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:718
+msgid "Are you sure you want to logout?"
+msgstr "Sigurado ka bang gusto mong mag-logout?"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:719
+msgid "YES"
+msgstr "OO"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:720
+msgid "NO"
+msgstr "HINDI"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:728
+#: ⁨.\core\templates\core\dashboard page.html⁩:802
+#: .\detection\templates\detection\Scanpage.html:741
+msgid "OK"
+msgstr "OK"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:737
+#: ⁨.\core\templates\core\dashboard page.html⁩:750
+#: .\core\templates\core\list_page.html:220
+msgid "Close"
+msgstr "Isara"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:746
+#: ⁨.\core\templates\core\dashboard page.html⁩:846
+#, fuzzy
+#| msgid "No description available for this plant."
+msgid "No scan history available for this plant."
+msgstr "Walang available na deskripsyon para sa halamang ito."
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:749
+msgid "Print"
+msgstr ""
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:822
+#, fuzzy
+#| msgid "View History"
+msgid "Scan History"
+msgstr "Tingnan ang Historya"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:823
+msgid "Loading scan history..."
+msgstr ""
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:837
+msgid "Date"
+msgstr ""
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:837
+#, fuzzy
+#| msgid "Diseases"
+msgid "Disease"
+msgstr "Mga Sakit"
+
+#: ⁨.\core\templates\core\dashboard page.html⁩:851
+msgid "Failed to load scan history."
+msgstr ""
+
+#: .\core\templates\core\homepage.html:272
+#: .\core\templates\core\loginpage.html:276
+#: .\core\templates\core\signuppage.html:270
+msgid "ALMA VILLA, GLORIA, ORIENTAL MINDORO"
+msgstr "ALMA VILLA, GLORIA, ORIENTAL MINDORO"
+
+#: .\core\templates\core\homepage.html:274
+#: .\core\templates\core\signuppage.html:302
+msgid "SIGN UP"
+msgstr "MAG-SIGN UP"
+
+#: .\core\templates\core\homepage.html:275
+#: .\core\templates\core\loginpage.html:292
+msgid "LOGIN"
+msgstr "MAG-LOGIN"
+
+#: .\core\templates\core\homepage.html:285
+msgid ""
+"ETC Cam has a feature that allows users to visualize 3D version of the plant "
+"through their devices."
+msgstr ""
+"Ang ETC Cam ay may feature na nagpapahintulot sa mga user na i-visualize ang "
+"3D na bersyon ng halaman sa pamamagitan ng kanilang mga device."
+
+#: .\core\templates\core\homepage.html:292
+msgid ""
+"ETC Cam helps farmers quickly scan for diseases in eggplants, tomatoes, and "
+"chili pepper."
+msgstr ""
+"Tinutulungan ng ETC Cam ang mga magsasaka na mabilis na mag-scan para sa mga "
+"sakit sa talong, kamatis, at sili."
+
+#: .\core\templates\core\homepage.html:298
+msgid "Plant Disease Information"
+msgstr "Impormasyon sa Sakit ng Halaman"
+
+#: .\core\templates\core\homepage.html:299
+msgid ""
+"Provides comprehensive information about plant diseases for easy "
+"identification and treatment."
+msgstr ""
+"Nagbibigay ng komprehensibong impormasyon tungkol sa mga sakit ng halaman "
+"para sa madaling pagtukoy at paggamot."
+
+#: .\core\templates\core\homepage.html:313
+msgid "0905 356 1597"
+msgstr "0905 356 1597"
+
+#: .\core\templates\core\homepage.html:322
+msgid "0995 531 9453"
+msgstr "0995 531 9453"
+
+#: .\core\templates\core\homepage.html:331
+msgid "0991 693 2972"
+msgstr "0991 693 2972"
+
+#: .\core\templates\core\list_page.html:180
+msgid "LIST OF DISEASES AND THEIR DETAILS"
+msgstr "LISTAHAN NG MGA SAKIT AT ANG KANILANG MGA DETALYE"
+
+#: .\core\templates\core\list_page.html:181
+msgid "CHOOSE WHAT KIND OF DISEASE YOU WANT TO KNOW."
+msgstr "PILIIN KUNG ANONG URI NG SAKIT ANG GUSTO MONG MALAMAN."
+
+#: .\core\templates\core\list_page.html:185
+msgid "Diseases"
+msgstr "Mga Sakit"
+
+#: .\core\templates\core\list_page.html:191
+#, fuzzy
+#| msgid "No description available for this plant."
+msgid "No description available."
+msgstr "Walang available na deskripsyon para sa halamang ito."
+
+#: .\core\templates\core\list_page.html:192
+msgid "No symptoms listed."
+msgstr "Walang listahan ng sintomas."
+
+#: .\core\templates\core\list_page.html:193
+#, fuzzy
+#| msgid "Prevention methods will be displayed here."
+msgid "No prevention methods listed."
+msgstr "Lalabas ang mga paraan ng pag-iwas dito."
+
+#: .\core\templates\core\list_page.html:198
+msgid "No diseases listed for"
+msgstr "Walang sakit na nakalista para sa"
+
+#: .\core\templates\core\list_page.html:198
+msgid "yet."
+msgstr "pa."
+
+#: .\core\templates\core\list_page.html:203
+msgid "No plant or disease data available yet."
+msgstr "Wala pang available na data ng halaman o sakit."
+
+#: .\core\templates\core\list_page.html:211
+msgid "Description"
+msgstr "Deskripsyon"
+
+#: .\core\templates\core\list_page.html:214
+msgid "Symptoms"
+msgstr "Mga Sintomas"
+
+#: .\core\templates\core\list_page.html:217
+msgid "Prevention"
+msgstr "Pag-iwas"
+
+#: .\core\templates\core\loginpage.html:8
+msgid "E.T.C CAM - Login"
+msgstr "E.T.C CAM - Login"
+
+#: .\core\templates\core\loginpage.html:282
+msgid "Get Started"
+msgstr "Magsimula"
+
+#: .\core\templates\core\loginpage.html:286
+msgid "EMAIL"
+msgstr "EMAIL"
+
+#: .\core\templates\core\loginpage.html:289
+msgid "PASSWORD"
+msgstr "PASSWORD"
+
+#: .\core\templates\core\loginpage.html:296
+msgid "Invalid email or password!"
+msgstr "Hindi tugma ang email o password!"
+
+#: .\core\templates\core\loginpage.html:300
+msgid "DON'T HAVE AN ACCOUNT? CLICK SIGN UP"
+msgstr "WALA PANG ACCOUNT? MAG-SIGN UP"
+
+#: .\core\templates\core\signuppage.html:8
+msgid "E.T.C CAM - Sign Up"
+msgstr "E.T.C CAM - Mag-sign Up"
+
+#: .\core\templates\core\signuppage.html:276
+msgid "Create Account"
+msgstr "Gumawa ng Account"
+
+#: .\core\templates\core\signuppage.html:281
+msgid "Email"
+msgstr "Email"
+
+#: .\core\templates\core\signuppage.html:288
+msgid "Password"
+msgstr "Password"
+
+#: .\core\templates\core\signuppage.html:295
+msgid "Confirm Password"
+msgstr "Kumpirmahin ang Password"
+
+#: .\core\templates\core\signuppage.html:310
+msgid "ALREADY HAVE AN ACCOUNT? LOGIN"
+msgstr "MAY ACCOUNT NA? MAG-LOGIN"
+
+#: .\core\views.py:35
+msgid "Invalid username or password."
+msgstr "Hindi tugma ang username o password."
+
+#: .\core\views.py:95
+msgid "Healthy / No Disease Detected"
+msgstr "Malusog / Walang Sakit na Natukoy"
+
+#: .\core\views.py:99
+msgid "No Scans"
+msgstr "Walang Scan"
+
+#: .\core\views.py:134
+msgid "No description available for this plant."
+msgstr "Walang available na deskripsyon para sa halamang ito."
+
+#: .\detection\templates\detection\Scanpage.html:8
+msgid "Scan for Diseases - E.T.C CAM"
+msgstr "Scan para sa mga Sakit - E.T.C CAM"
+
+#: .\detection\templates\detection\Scanpage.html:371
+msgid "SCAN FOR DISEASES"
+msgstr "MAG-SCAN PARA SA MGA SAKIT"
+
+#: .\detection\templates\detection\Scanpage.html:379
+msgid "Scanned Plant Image"
+msgstr "Na-scan na Larawan ng Halaman"
+
+#: .\detection\templates\detection\Scanpage.html:396
+msgid "SCAN IMAGE"
+msgstr "I-SCAN ANG LARAWAN"
+
+#: .\detection\templates\detection\Scanpage.html:400
+msgid "Scanning..."
+msgstr "Ini-scan..."
+
+#: .\detection\templates\detection\Scanpage.html:406
+msgid "Choose the plant first before scanning:"
+msgstr "Piliin muna ang halaman bago mag-scan:"
+
+#: .\detection\templates\detection\Scanpage.html:414
+msgid "Please re-start the scanning again."
+msgstr "Mangyaring simulan muli ang pag-scan."
+
+#: .\detection\templates\detection\Scanpage.html:416
+msgid "Scan Result:"
+msgstr "Resulta ng Scan:"
+
+#: .\detection\templates\detection\Scanpage.html:417
+#: .\detection\templates\detection\Scanpage.html:630
+msgid "Detected: Awaiting Scan"
+msgstr "Natukoy: Naghihintay ng Scan"
+
+#: .\detection\templates\detection\Scanpage.html:418
+#: .\detection\templates\detection\Scanpage.html:631
+#: .\detection\templates\detection\Scanpage.html:696
+#: .\detection\templates\detection\Scanpage.html:708
+#: .\detection\templates\detection\Scanpage.html:720
+msgid "Confidence: N/A"
+msgstr "Kumpiyansa: Hindi Magagamit"
+
+#: .\detection\templates\detection\Scanpage.html:420
+msgid "Description:"
+msgstr "Deskripsyon:"
+
+#: .\detection\templates\detection\Scanpage.html:421
+#: .\detection\templates\detection\Scanpage.html:632
+msgid ""
+"Perform a scan to get detailed information about the detected disease, its "
+"symptoms, and prevention strategies."
+msgstr ""
+"Magsagawa ng scan upang makakuha ng detalyadong impormasyon tungkol sa "
+"natukoy na sakit, mga sintomas nito, at mga estratehiya sa pag-iwas."
+
+#: .\detection\templates\detection\Scanpage.html:423
+msgid "Symptoms:"
+msgstr "Mga Sintomas:"
+
+#: .\detection\templates\detection\Scanpage.html:424
+#: .\detection\templates\detection\Scanpage.html:633
+msgid "Symptoms will appear here after a successful scan."
+msgstr "Lalabas ang mga sintomas dito pagkatapos ng matagumpay na scan."
+
+#: .\detection\templates\detection\Scanpage.html:426
+msgid "Prevention Strategies:"
+msgstr "Mga Estratehiya sa Pag-iwas:"
+
+#: .\detection\templates\detection\Scanpage.html:427
+#: .\detection\templates\detection\Scanpage.html:634
+msgid "Prevention methods will be displayed here."
+msgstr "Lalabas ang mga paraan ng pag-iwas dito."
+
+#: .\detection\templates\detection\Scanpage.html:489
+msgid "Error accessing the camera:"
+msgstr "Error sa pag-access sa camera:"
+
+#: .\detection\templates\detection\Scanpage.html:489
+msgid "Please ensure camera permissions are granted or upload an image."
+msgstr "Pakitiyak na pinahintulutan ang camera o mag-upload ng larawan."
+
+#: .\detection\templates\detection\Scanpage.html:644
+msgid "Please capture or upload an image first."
+msgstr "Mangyaring kumuha o mag-upload muna ng larawan."
+
+#: .\detection\templates\detection\Scanpage.html:650
+msgid "Please select the type of plant you are scanning."
+msgstr "Mangyaring piliin ang uri ng halaman na ini-scan."
+
+#: .\detection\templates\detection\Scanpage.html:692
+msgid "Detected:"
+msgstr "Natukoy:"
+
+#: .\detection\templates\detection\Scanpage.html:694
+msgid "Confidence:"
+msgstr "Kumpiyansa:"
+
+#: .\detection\templates\detection\Scanpage.html:707
+msgid "Error:"
+msgstr "Error:"
+
+#: .\detection\templates\detection\Scanpage.html:707
+#: .\detection\templates\detection\Scanpage.html:713
+msgid "Unknown error"
+msgstr "Hindi alam na error"
+
+#: .\detection\templates\detection\Scanpage.html:713
+msgid "Scan Error:"
+msgstr "Error sa Scan:"
+
+#: .\detection\templates\detection\Scanpage.html:719
+#: .\detection\templates\detection\Scanpage.html:725
+msgid "Network Error:"
+msgstr "Error sa Network:"
+
+#~ msgid "No Diseases Defined"
+#~ msgstr "Walang Tinukoy na mga Sakit"
+
+#~ msgid "Disease Scans"
+#~ msgstr "Mga Scan ng Sakit"
+
+#~ msgid "No scan data available yet for"
+#~ msgstr "Wala pang available na data ng scan para sa"
+
+#~ msgid "Start scanning to see your disease statistics!"
+#~ msgstr "Magsimula ng pag-scan para makita ang impormasyon ng mga sakit!"
+
+#~ msgid "No plant data configured or available."
+#~ msgstr "Walang impormasyon na maipakikita"
+
+#~ msgid "Please contact support if this persists."
+#~ msgstr "Pakiusap, paki-contact kami kapag nangyari ito."
+
+#~ msgid "Disease Count"
+#~ msgstr "Bilang ng Sakit"

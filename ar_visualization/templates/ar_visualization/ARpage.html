@@ -1,0 +1,233 @@
+{% load static %}
+{% load i18n %} {# Load i18n tags for translation #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "AR Visualization" %} - E.T.C. CAM</title> {# Marked for translation #}
+    <link rel="icon" type="image/png" href="{% static 'img/ETC_LOGO2.png' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        /* Global Styles */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-image: url('{% static 'img/background.jpg' %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            margin: 0;
+            font-family: 'Inter', sans-serif; /* Using Inter font as per guidelines */
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        /* Navbar Styling */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+        nav .logo-link {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: white; /* Ensure logo link is white */
+        }
+        nav a.logo-link {
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        nav a.logo-link img {
+            width: auto;
+            height: 4rem; /* Consistent logo height */
+            margin-right: 0.5rem;
+            object-fit: contain;
+        }
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+        }
+        .nav-actions a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            position: relative;
+        }
+        .nav-actions a::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -3px;
+            width: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 9999px;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+        .nav-actions a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Transparent Header styles */
+        .transparent-header-spacer {
+            width: 100%;
+            height: 96px; /* Adjust based on navbar height */
+            background-color: rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 5;
+        }
+
+        /* Main Content Styling */
+        .container {
+            padding-top: 6rem; /* Space for fixed navbar and spacer */
+        }
+
+        /* Crop Card Styling (reverted to icon-based) */
+        .crop-card {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .crop-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            background: rgba(255, 255, 255, 0.15);
+        }
+        .crop-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        /* Hide image elements that were part of the previous version */
+        .crop-card img {
+            display: none; /* Hide images in this version */
+        }
+
+
+        /* Responsive Styles for Navbar */
+        @media (max-width: 768px) {
+            .nav-actions a.back-button-text {
+                display: none;
+            }
+            .nav-actions a.back-button-icon {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                background-color: rgba(255, 255, 255, 0.2);
+                border: 2px solid white;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                padding: 0;
+            }
+            .nav-actions a.back-button-icon i {
+                font-size: 1.2rem;
+            }
+        }
+        .nav-actions a.back-button-icon {
+            display: none;
+        }
+    </style>
+</head>
+<body class="h-screen overflow-y-auto">
+
+    <nav class="fixed top-0 left-0 w-full flex justify-between items-center p-6 text-white font-semibold bg-transparent">
+        <a href="#" class="logo-link">
+            <img src="{% static 'img/ETC_LOGO.png' %}" alt="Logo"> E.T.C. CAM
+        </a>
+        <div class="nav-actions">
+            <a href="{% url 'dashboard_page' %}" class="back-button-text hover-effect bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700">{% trans "Back to Dashboard" %}</a> {# Marked for translation #}
+            <a href="{% url 'dashboard_page' %}" class="back-button-icon hover-effect hidden md:flex">
+                <i class="fas fa-home"></i>
+            </a>
+        </div>
+    </nav>
+
+    {# Added a transparent header div to fill the space below the fixed navbar #}
+    <div class="transparent-header-spacer"></div>
+
+    <div class="container mx-auto mt-8 p-20">
+        <h1 class="text-center text-4xl font-bold mb-8">{% trans "AUGMENTED REALITY" %}</h1> {# Marked for translation #}
+        <p class="text-center text-lg mb-8">{% trans "SELECT A CROP TO VISUALIZE IN 3D" %}</p> {# Marked for translation #}
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+            <!-- Eggplant Card -->
+            <div class="crop-card" onclick="startCropAR('eggplant')">
+                <div class="crop-icon text-purple-300">
+                    <i class="fas fa-seedling"></i> {# Icon for Eggplant #}
+                </div>
+                <h3 class="text-xl font-bold mb-2">{% trans "Eggplant" %}</h3> {# Marked for translation #}
+                <p class="text-sm opacity-80">{% trans "View 3D model in AR" %}</p> {# Marked for translation #}
+            </div>
+            
+            <!-- Tomato Card -->
+            <div class="crop-card" onclick="startCropAR('tomato')"> {# Note: Use 'tomato' to match get_crop_model key #}
+                <div class="crop-icon text-red-300">
+                    <i class="fas fa-apple-alt"></i> {# Icon for Tomato #}
+                </div>
+                <h3 class="text-xl font-bold mb-2">{% trans "Tomato" %}</h3> {# Marked for translation #}
+                <p class="text-sm opacity-80">{% trans "View 3D model in AR" %}</p> {# Marked for translation #}
+            </div>
+            
+            <!-- Chili Pepper Card -->
+            <div class="crop-card" onclick="startCropAR('chili')"> {# Note: Use 'chili' to match get_crop_model key #}
+                <div class="crop-icon text-red-500">
+                    <i class="fas fa-pepper-hot"></i> {# Icon for Chili Pepper #}
+                </div>
+                <h3 class="text-xl font-bold mb-2">{% trans "Chili Pepper" %}</h3> {# Marked for translation #}
+                <p class="text-sm opacity-80">{% trans "View 3D model in AR" %}</p> {# Marked for translation #}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /**
+         * Stores the selected crop type in localStorage and redirects to the AR camera page.
+         * @param {string} cropType - The type of crop selected (e.g., 'eggplant', 'tomato', 'chili').
+         */
+        function startCropAR(cropType) {
+            // Store the selected crop in localStorage so ar_camera.html can retrieve it
+            localStorage.setItem('selectedCrop', cropType);
+            
+            // Redirect using Django's URL tag with namespacing
+            window.location.href = "{% url 'ar_visualization:ar_camera' %}?crop=" + cropType; 
+        }
+    </script>
+</body>
+</html>

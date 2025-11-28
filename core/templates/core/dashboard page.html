@@ -1,0 +1,1288 @@
+{% load i18n %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "Dashboard" %} - E.T.C. CAM</title>
+    <link rel="icon" type="image/png" href="{% static 'img/ETC_LOGO2.png' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Global Styles */
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-image: url('{% static 'img/background.jpg' %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+
+        /* Navbar Styling */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 1.5rem;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.3);
+            z-index: 10;
+        }
+        nav .logo-link {
+            font-size: 1.5rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        nav a.logo-link {
+            text-decoration: none;
+            color: white;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+        nav a.logo-link img {
+            width: auto;
+            height: 4rem;
+            margin-right: 0.5rem;
+            object-fit: contain;
+        }
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+        .nav-actions a {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            position: relative;
+        }
+        .nav-actions a::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: -3px;
+            width: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 9999px;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+        .nav-actions a:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding-top: 10rem;
+            text-align: center;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: rgba(45, 62, 47, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease-in-out;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #a7f3d0;
+        }
+
+        .card h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: #e0f2f7;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: #d1fae5;
+            flex-grow: 1;
+        }
+
+        .card a {
+            display: inline-block;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .card a:hover {
+            background-color: #2930aaff;
+        }
+
+        /* Responsive design for nav actions */
+        @media (max-width: 768px) {
+            .nav-actions .text-button-container {
+                display: none;
+            }
+            .nav-actions .icon-button {
+                display: flex !important;
+                align-items: center;
+                justify-content: center;
+                background-color: rgba(255, 255, 255, 0.2);
+                border: 2px solid white;
+                border-radius: 50%;
+                width: 40px;
+                height: 40px;
+                padding: 0;
+            }
+            .nav-actions .icon-button i {
+                font-size: 1.2rem;
+            }
+            .nav-actions .language-dropdown-wrapper .icon-button {
+                display: flex;
+            }
+        }
+        
+        .nav-actions .icon-button-wrapper {
+            display: none;
+        }
+
+        /* Adjustments for fixed header spacing */
+        .header-spacer {
+            height: 7rem;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 5;
+        }
+        .content-container {
+            padding-top: 10rem;
+        }
+
+        /* Chart Styles */
+        .chart-container {
+            background-color: rgba(45, 62, 47, 0.8);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .chart-card {
+            background-color: rgba(67, 86, 69, 0.9);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            max-width: 400px;
+        }
+        .chart-card h3 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            color: #e0f2f7;
+        }
+        .chart-wrapper {
+            width: 100%;
+            height: 300px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .chart-card canvas {
+            max-height: 280px;
+            max-width: 280px;
+            width: 100% !important;
+            height: 100% !important;
+        }
+        .chart-placeholder {
+            text-align: center;
+            padding: 20px;
+            font-size: 1.1rem;
+            color: #d1fae5;
+        }
+        .view-history-btn {
+            background-color: #12980bff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            border: none;
+            cursor: pointer;
+            margin-top: 1rem;
+        }
+        .view-history-btn:hover {
+            background-color: #0056b3;
+        }
+
+        /* About Section Styles */
+        .about-section {
+            background-color: rgba(45, 62, 47, 0.8);
+            border-radius: 10px;
+            padding: 40px;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .about-section h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: #e0f2f7;
+            text-align: center;
+        }
+        .about-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .about-card {
+            background-color: rgba(67, 86, 69, 0.9);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .about-card i {
+            font-size: 2.5rem;
+            color: #a7f3d0;
+            margin-bottom: 1rem;
+        }
+        .about-card h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e0f2f7;
+            margin-bottom: 0.5rem;
+        }
+        .about-card p {
+            font-size: 1rem;
+            color: #d1fae5;
+            line-height: 1.6;
+        }
+        .about-card a {
+            color: #a7f3d0;
+            text-decoration: none;
+            font-weight: bold;
+            margin-top: 1rem;
+            display: inline-block;
+        }
+        .about-card a:hover {
+            text-decoration: underline;
+        }
+
+        /* Team Section Styles */
+        .team-section {
+            background-color: rgba(45, 62, 47, 0.8);
+            border-radius: 10px;
+            padding: 40px;
+            margin-top: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .team-section h2 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            color: #e0f2f7;
+            text-align: center;
+        }
+        .team-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .team-card {
+            background-color: rgba(67, 86, 69, 0.9);
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        .team-card-content {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-direction: column;
+        }
+        @media (min-width: 640px) {
+            .team-card-content {
+                flex-direction: row;
+            }
+        }
+        .team-card img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #a7f3d0;
+        }
+        .team-details {
+            text-align: left;
+        }
+        .team-card h3 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #e0f2f7;
+            margin-bottom: 0.5rem;
+            margin-top: 0;
+        }
+        .team-card p {
+            font-size: 1rem;
+            color: #d1fae5;
+            line-height: 1.6;
+        }
+        .team-card .contact-button {
+            background-color: #007bff;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+            margin-top: 1rem;
+            display: inline-block;
+            border: none;
+            cursor: pointer;
+        }
+        .team-card .contact-button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Footer */
+        footer {
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            text-align: center;
+            padding: 1.5rem 0;
+            margin-top: 3rem;
+            font-size: 0.9rem;
+        }
+
+        /* Modals */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 400px;
+            text-align: center;
+            color: #333;
+        }
+
+        .modal-content button {
+            background-color: #69d11eff;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .modal-content button:hover {
+            background-color: #a92608ff;
+        }
+
+        /* Custom Message Modal */
+        #customMessageModal .modal-content {
+            background-color: #fefefe;
+            color: #333;
+        }
+
+        #customMessageModal .modal-content p {
+            color: #333;
+        }
+
+        /* Scan History Modal Styles */
+        #scanHistoryModal .modal-content {
+            max-width: 90%;
+            width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 2px solid #007bff;
+            background: white;
+            color: #007bff;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .filter-btn.active {
+            background: #007bff;
+            color: white;
+        }
+
+        .filter-btn:hover {
+            background: #007bff;
+            color: white;
+        }
+
+        .date-range-selector {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .date-range-selector input {
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+
+        .stats-summary {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            border-left: 4px solid #007bff;
+        }
+
+        .stats-summary p {
+            margin: 5px 0;
+            color: #333;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+        }
+
+        .no-data i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            color: #ccc;
+        }
+
+        /* Table styles */
+        .scan-history-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .scan-history-table th,
+        .scan-history-table td {
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .scan-history-table th {
+            background-color: #f2f2f2;
+            font-weight: bold;
+            color: #333;
+            position: sticky;
+            top: 0;
+        }
+
+        .scan-history-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .scan-history-table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .scan-history-table td {
+            color: #555;
+        }
+
+        .confidence-high {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .confidence-medium {
+            color: #ffc107;
+            font-weight: bold;
+        }
+
+        .confidence-low {
+            color: #dc3545;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="h-screen overflow-y-auto">
+
+    <div class="header-spacer"></div>
+
+    <nav class="fixed top-0 left-0 w-full flex justify-between items-center p-6 text-white font-semibold bg-transparent z-20">
+        <a href="{% url 'dashboard_page' %}" class="logo-link">
+            <img src="{% static 'img/ETC_LOGO.png' %}" alt="{% trans "ETC Logo" %}"> {% trans "E.T.C. CAM" %}
+        </a>
+        <div class="nav-actions">
+            <div class="text-button-container hidden md:flex items-center gap-4">
+                <a href="#services" class="hover-effect">{% trans "SERVICES" %}</a>
+                <a href="#about" class="hover-effect">{% trans "ABOUT" %}</a>
+
+                <div class="relative inline-block text-left language-dropdown-wrapper">
+                    <a href="#" onclick="toggleLanguageDropdown(event, 'lang-dropdown-desktop')" class="hover-effect flex items-center">
+                        <i class="fas fa-globe mr-2"></i> {% trans "Language" %}
+                    </a>
+                    <div id="lang-dropdown-desktop" class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+                        <div class="py-1" role="none">
+                            <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.path }}">
+                                <button type="submit" name="language" value="en" class="text-gray-700 block px-4 py-2 text-sm w-full text-left hover:bg-gray-100" role="menuitem">English</button>
+                                <button type="submit" name="language" value="tl" class="text-gray-700 block px-4 py-2 text-sm w-full text-left hover:bg-gray-100" role="menuitem">Filipino</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <a href="#" onclick="showLogoutModal()" class="hover-effect">{% trans "LOGOUT" %}</a>
+            </div>
+
+            <div class="icon-button-container flex md:hidden items-center gap-4">
+                <a href="#services" class="icon-button"><i class="fas fa-cogs"></i></a>
+                <a href="#about" class="icon-button"><i class="fas fa-info-circle"></i></a>
+                <div class="relative inline-block text-left language-dropdown-wrapper">
+                    <a href="#" onclick="toggleLanguageDropdown(event, 'lang-dropdown-mobile')" class="icon-button">
+                        <i class="fas fa-globe"></i>
+                    </a>
+                    <div id="lang-dropdown-mobile" class="origin-top-right absolute right-0 mt-2 w-40 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="menu-button">
+                        <div class="py-1" role="none">
+                            <form action="{% url 'set_language' %}" method="post">{% csrf_token %}
+                                <input name="next" type="hidden" value="{{ request.path }}">
+                                <button type="submit" name="language" value="en" class="text-gray-700 block px-4 py-2 text-sm w-full text-left hover:bg-gray-100" role="menuitem">English</button>
+                                <button type="submit" name="language" value="tl" class="text-gray-700 block px-4 py-2 text-sm w-full text-left hover:bg-gray-100" role="menuitem">Filipino</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <a href="#" onclick="showLogoutModal()" class="icon-button"><i class="fas fa-sign-out-alt"></i></a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="content-container mx-auto px-6 py-8">
+        <header class="hero text-center mb-12">
+            <h1 class="text-5xl font-extrabold mb-4 animate-fade-in">{% trans "Welcome to E.T.C. CAM" %}</h1>
+            <p class="text-xl text-gray-200 animate-fade-in-delay">{% trans "DETECT DISEASES OF EGGPLANT, TOMATO, OR CHILI PEPPER" %}</p>
+        </header>
+
+        <section id="services" class="py-12">
+            <h2 class="text-center text-4xl font-bold mb-10">{% trans "Our Services" %}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="card">
+                    <i class="fas fa-cube"></i>
+                    <h3>{% trans "AR" %}</h3>
+                    <p>{% trans "Visualize Crops in 3D" %}</p>
+                    <a href="{% url 'ar_visualization:ar_page' %}" class="mt-4">{% trans "EXPLORE AR" %}</a>
+                </div>
+                <div class="card">
+                    <i class="fas fa-camera"></i>
+                    <h3>{% trans "SCAN" %}</h3>
+                    <p>{% trans "Scan for Diseases" %}</p>
+                    <a href="{% url 'ar_visualization:scan_page' %}" class="mt-4">{% trans "START SCAN" %}</a>
+                </div>
+                <div class="card">
+                    <i class="fas fa-clipboard-list"></i>
+                    <h3>{% trans "LIST" %}</h3>
+                    <p>{% trans "List of Diseases" %}</p>
+                    <a href="{% url 'list_page' %}" class="mt-4">{% trans "VIEW LIST" %}</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="scan-history" class="py-12">
+            <h2 class="text-center text-4xl font-bold mb-10">{% trans "Scanned Disease History Visualization" %}</h2>
+            <div class="chart-container">
+                <div class="chart-card">
+                    <h3>{% trans "Eggplant" %}</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="eggplantChart"></canvas>
+                    </div>
+                    <button onclick="showHistoryModal('Eggplant')" class="view-history-btn">{% trans "View History" %}</button>
+                </div>
+
+                <div class="chart-card">
+                    <h3>{% trans "Tomato" %}</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="tomatoChart"></canvas>
+                    </div>
+                    <button onclick="showHistoryModal('Tomato')" class="view-history-btn">{% trans "View History" %}</button>
+                </div>
+
+                <div class="chart-card">
+                    <h3>{% trans "Chili" %}</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="chiliChart"></canvas>
+                    </div>
+                    <button onclick="showHistoryModal('Chili Pepper')" class="view-history-btn">{% trans "View History" %}</button>
+                </div>
+            </div>
+
+            {% if debug %}
+            <div class="mt-4 p-4 bg-yellow-100 text-yellow-800 rounded">
+                <h4 class="font-bold">Debug Information:</h4>
+                <pre>{{ plants_data_json }}</pre>
+            </div>
+            {% endif %}
+        </section>
+        
+        <section id="about" class="py-12">
+            <h2 class="text-center text-4xl font-bold mb-10">{% trans "About E.T.C CAM" %}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 about-cards-grid">
+                <div class="about-card">
+                    <i class="fas fa-seedling"></i>
+                    <h3>{% trans "3D Visualization" %}</h3>
+                    <p>{% trans "E.T.C Cam have a feature that allows users to visualize 3D version of the plant through their gadgets." %}</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-leaf"></i>
+                    <h3>{% trans "Scan Diseases" %}</h3>
+                    <p>{% trans "E.T.C Cam is designed and made to help farmers for faster scanning of diseases of eggplant, tomato, and chili pepper." %}</p>
+                </div>
+                <div class="about-card">
+                    <i class="fas fa-book-open"></i>
+                    <h3>{% trans "Know More About the Diseases" %}</h3>
+                    <p>{% trans "E.T.C Cam also provides a list of diseases for each crop for farmers to easily identify and get rid of the diseases." %}</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="team" class="py-12">
+            <h2 class="text-center text-4xl font-bold mb-10">{% trans "Our Team" %}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 team-cards-grid">
+                <div class="team-card">
+                    <div class="team-card-content">
+                        <img src="{% static 'img/cath.png' %}" alt="Catherine Capillano">
+                        <div class="team-details">
+                            <h3>{% trans "Catherine Capillano" %}</h3>
+                            <p>{% trans "UI/UX Designer, System Analyst" %}</p>
+                            <p>catherinecapillano281@gmail.com</p>
+                            <p>0905 356 1597</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-card-content">
+                        <img src="{% static 'img/jelah.png' %}" alt="Jelah Quintana">
+                        <div class="team-details">
+                            <h3>{% trans "Jelah Quintana" %}</h3>
+                            <p>{% trans "UI/UX Designer, Lead Developer" %}</p>
+                            <p>jelahquintana@gmail.com</p>
+                            <p>0995 531 9453</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-card">
+                    <div class="team-card-content">
+                        <img src="{% static 'img/byron.png' %}" alt="Jake Byron Orense">
+                        <div class="team-details">
+                            <h3>{% trans "Jake Byron Orense" %}</h3>
+                            <p>{% trans "System Analyst" %}</p>
+                            <p>orensejakebyron19@gmail.com</p>
+                            <p>0991 693 2972</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <footer class="mt-12 bg-black bg-opacity-50 text-white text-center p-6">
+        <p>&copy; 2025 {% trans "E.T.C CAM" %}. {% trans "All rights reserved." %}</p>
+    </footer>
+
+    {# Logout Confirmation Modal #}
+    <div id="logoutModal" class="modal">
+        <div class="modal-content">
+            <p>{% trans "Are you sure you want to logout?" %}</p>
+            <button style="background-color: red;" onclick="confirmLogout()">{% trans "YES" %}</button>
+            <button style="background-color: gray;" onclick="hideLogoutModal()">{% trans "NO" %}</button>
+        </div>
+    </div>
+
+    {# Custom Message Modal #}
+    <div id="customMessageModal" class="modal">
+        <div class="modal-content">
+            <p class="text-gray-800 text-lg mb-4"></p>
+            <button onclick="document.getElementById('customMessageModal').style.display='none'" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">{% trans "OK" %}</button>
+        </div>
+    </div>
+
+    {# Contact Info Modal #}
+    <div id="contactInfoModal" class="modal">
+        <div class="modal-content">
+            <h3 class="text-gray-800 text-xl font-bold mb-2" id="contactModalName"></h3>
+            <p class="text-gray-700 text-md mb-4" id="contactModalEmail"></p>
+            <button onclick="document.getElementById('contactInfoModal').style.display='none'" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">{% trans "Close" %}</button>
+        </div>
+    </div>
+
+    {# Enhanced Scan History Modal #}
+    <div id="scanHistoryModal" class="modal">
+        <div class="modal-content">
+            <h3 id="scanHistoryModalTitle" class="text-lg font-bold mb-4 text-gray-800"></h3>
+            
+            {# Filter Controls #}
+            <div class="filter-controls">
+                <button class="filter-btn active" onclick="setFilter('all')">{% trans "All Time" %}</button>
+                <button class="filter-btn" onclick="setFilter('today')">{% trans "Today" %}</button>
+                <button class="filter-btn" onclick="setFilter('week')">{% trans "This Week" %}</button>
+                <button class="filter-btn" onclick="setFilter('month')">{% trans "This Month" %}</button>
+                <div class="date-range-selector">
+                    <input type="date" id="startDate" onchange="setCustomDateRange()">
+                    <span>{% trans "to" %}</span>
+                    <input type="date" id="endDate" onchange="setCustomDateRange()">
+                </div>
+                <button class="filter-btn" onclick="clearFilters()">{% trans "Clear Filters" %}</button>
+            </div>
+
+            {# Statistics Summary #}
+            <div id="statsSummary" class="stats-summary">
+                <p><strong>{% trans "Total Scans:" %} <span id="totalScans">0</span></strong></p>
+                <p>{% trans "Diseases Detected:" %} <span id="diseasesDetected">0</span></p>
+                <p>{% trans "Healthy Plants:" %} <span id="healthyPlants">0</span></p>
+            </div>
+
+            {# Scan History Table Container #}
+            <div id="scanHistoryTableContainer">
+                <div class="no-data">
+                    <i class="fas fa-history"></i>
+                    <p>{% trans "No scan history available for this plant." %}</p>
+                </div>
+            </div>
+
+            <div class="flex justify-end mt-4">
+                <button onclick="printHistory()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mr-2">{% trans "Print" %}</button>
+                <button onclick="hideHistoryModal()" class="bg-gray-300 hover:bg-red-400 text-white-800 font-bold py-2 px-4 rounded">{% trans "Close" %}</button>
+            </div>
+        </div>
+    </div>
+
+   <script>
+    // Global variables for filtering
+    let currentPlant = '';
+    let currentFilter = 'all';
+    let currentScans = [];
+
+    // Functions for modals and language toggles
+    function toggleLanguageDropdown(event, dropdownId) {
+        event.preventDefault();
+        event.stopPropagation();
+        const dropdown = document.getElementById(dropdownId);
+        const allDropdowns = document.querySelectorAll('.language-dropdown-wrapper .origin-top-right');
+        allDropdowns.forEach(dd => {
+            if (dd.id !== dropdownId && !dd.classList.contains('hidden')) {
+                dd.classList.add('hidden');
+            }
+        });
+        dropdown.classList.toggle('hidden');
+    }
+
+    window.onclick = function(event) {
+        if (!event.target.closest('.language-dropdown-wrapper')) {
+            const dropdowns = document.querySelectorAll('.language-dropdown-wrapper .origin-top-right');
+            dropdowns.forEach(dropdown => {
+                if (!dropdown.classList.contains('hidden')) {
+                    dropdown.classList.add('hidden');
+                }
+            });
+        }
+    }
+
+    function showLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'flex';
+    }
+
+    function hideLogoutModal() {
+        document.getElementById('logoutModal').style.display = 'none';
+    }
+
+    function confirmLogout() {
+        window.location.href = "{% url 'logout_view' %}";
+    }
+
+    function displayMessageModal(message) {
+        let modalElement = document.getElementById('customMessageModal');
+        if (!modalElement) {
+            modalElement = document.createElement('div');
+            modalElement.id = 'customMessageModal';
+            modalElement.className = 'fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50';
+            modalElement.innerHTML = `
+                <div class="bg-white p-6 rounded-lg shadow-xl text-center max-w-sm mx-auto">
+                    <p class="text-gray-800 text-lg mb-4"></p>
+                    <button onclick="document.getElementById('customMessageModal').style.display='none'" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">{% trans 'OK' %}</button>
+                </div>
+            `;
+            document.body.appendChild(modalElement);
+        }
+        modalElement.querySelector('p').textContent = message;
+        modalElement.style.display = 'flex';
+    }
+
+    function showContactModal(name, email) {
+        document.getElementById('contactModalName').textContent = name;
+        document.getElementById('contactModalEmail').textContent = email;
+        document.getElementById('contactInfoModal').style.display = 'flex';
+    }
+
+    // Enhanced History Modal Functions
+    function showHistoryModal(plantName) {
+        currentPlant = plantName;
+        const modal = document.getElementById('scanHistoryModal');
+        const modalTitle = document.getElementById('scanHistoryModalTitle');
+        
+        modalTitle.textContent = `${plantName} {% trans "Scan History" %}`;
+        modal.style.display = 'flex';
+        
+        // Reset filters and load data
+        setFilter('all');
+    }
+
+    function hideHistoryModal() {
+        document.getElementById('scanHistoryModal').style.display = 'none';
+        currentPlant = '';
+        currentFilter = 'all';
+    }
+
+    function setFilter(filterType) {
+        currentFilter = filterType;
+        
+        // Update active button
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        event.target.classList.add('active');
+        
+        // Load data with filter
+        loadScanHistory();
+    }
+
+    function setCustomDateRange() {
+        const startDate = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        
+        if (startDate && endDate) {
+            currentFilter = 'custom';
+            loadScanHistory();
+        }
+    }
+
+    function clearFilters() {
+        currentFilter = 'all';
+        document.getElementById('startDate').value = '';
+        document.getElementById('endDate').value = '';
+        setFilter('all');
+    }
+
+    function loadScanHistory() {
+        const tableContainer = document.getElementById('scanHistoryTableContainer');
+        tableContainer.innerHTML = '<p class="text-gray-600">{% trans "Loading scan history..." %}</p>';
+
+        let url = `/api/scan-history/?plant=${encodeURIComponent(currentPlant)}`;
+        
+        // Add filter parameter
+        if (currentFilter !== 'all') {
+            url += `&filter=${currentFilter}`;
+        }
+        
+        // Add date range for custom filter
+        if (currentFilter === 'custom') {
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+            if (startDate && endDate) {
+                url += `&start_date=${startDate}&end_date=${endDate}`;
+            }
+        }
+
+        fetch(url)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('API Response data:', data);
+                currentScans = data.scans || [];
+                renderScanHistoryTable(currentScans);
+                updateStatistics(currentScans);
+            })
+            .catch(error => {
+                console.error("Error fetching scan history:", error);
+                tableContainer.innerHTML = `
+                    <div class="no-data">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        <p>{% trans "Failed to load scan history." %}</p>
+                        <p class="text-sm">{% trans "Error:" %} ${error.message}</p>
+                    </div>
+                `;
+            });
+    }
+
+    function renderScanHistoryTable(scans) {
+        const tableContainer = document.getElementById('scanHistoryTableContainer');
+        
+        if (scans && scans.length > 0) {
+            let tableHTML = `
+                <div class="overflow-x-auto">
+                    <table class="scan-history-table">
+                        <thead>
+                            <tr>
+                                <th>{% trans "Date & Time" %}</th>
+                                <th>{% trans "Plant Type" %}</th>
+                                <th>{% trans "Disease Detected" %}</th>
+                                <th>{% trans "Confidence" %}</th>
+                                <th>{% trans "Status" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            `;
+            
+            scans.forEach(scan => {
+                const date = new Date(scan.scan_date);
+                const formattedDate = date.toLocaleDateString();
+                const formattedTime = date.toLocaleTimeString();
+                const diseaseName = scan.disease_name || '{% trans "No Disease Detected" %}';
+                const confidence = scan.confidence ? `${(scan.confidence * 100).toFixed(1)}%` : 'N/A';
+                const isHealthy = !scan.disease_name || scan.disease_name === 'Healthy';
+                
+                // Determine confidence class for styling
+                let confidenceClass = '';
+                if (scan.confidence) {
+                    if (scan.confidence >= 0.8) {
+                        confidenceClass = 'confidence-high';
+                    } else if (scan.confidence >= 0.5) {
+                        confidenceClass = 'confidence-medium';
+                    } else {
+                        confidenceClass = 'confidence-low';
+                    }
+                }
+                
+                tableHTML += `
+                    <tr>
+                        <td>${formattedDate}<br><small>${formattedTime}</small></td>
+                        <td>${scan.plant_type || currentPlant}</td>
+                        <td>${diseaseName}</td>
+                        <td class="${confidenceClass}">${confidence}</td>
+                        <td>${isHealthy ? '{% trans "Healthy" %}' : '{% trans "Diseased" %}'}</td>
+                    </tr>
+                `;
+            });
+            
+            tableHTML += `
+                        </tbody>
+                    </table>
+                </div>
+            `;
+            tableContainer.innerHTML = tableHTML;
+        } else {
+            tableContainer.innerHTML = `
+                <div class="no-data">
+                    <i class="fas fa-search"></i>
+                    <p>{% trans "No scan history found for the selected criteria." %}</p>
+                    <p class="text-sm">{% trans "Try changing your filters or scan some plants!" %}</p>
+                </div>
+            `;
+        }
+    }
+
+    function updateStatistics(scans) {
+        const totalScans = scans.length;
+        const diseasesDetected = scans.filter(scan => scan.disease_name && scan.disease_name !== 'Healthy').length;
+        const healthyPlants = scans.filter(scan => !scan.disease_name || scan.disease_name === 'Healthy').length;
+        
+        document.getElementById('totalScans').textContent = totalScans;
+        document.getElementById('diseasesDetected').textContent = diseasesDetected;
+        document.getElementById('healthyPlants').textContent = healthyPlants;
+    }
+
+    function printHistory() {
+        if (currentScans.length === 0) {
+            alert('{% trans "No data to print." %}');
+            return;
+        }
+
+        const printWindow = window.open('', '_blank');
+        const title = document.getElementById('scanHistoryModalTitle').textContent;
+        const stats = `
+            Total Scans: ${currentScans.length} | 
+            Diseases Detected: ${currentScans.filter(scan => scan.disease_name && scan.disease_name !== 'Healthy').length} | 
+            Healthy Plants: ${currentScans.filter(scan => !scan.disease_name || scan.disease_name === 'Healthy').length}
+        `;
+        
+        let tableHTML = `
+            <table border="1" style="width:100%; border-collapse:collapse; margin-top:20px;">
+                <thead>
+                    <tr style="background-color:#f2f2f2;">
+                        <th style="padding:8px; border:1px solid #ddd;">Date & Time</th>
+                        <th style="padding:8px; border:1px solid #ddd;">Plant Type</th>
+                        <th style="padding:8px; border:1px solid #ddd;">Disease Detected</th>
+                        <th style="padding:8px; border:1px solid #ddd;">Confidence</th>
+                        <th style="padding:8px; border:1px solid #ddd;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+        `;
+        
+        currentScans.forEach(scan => {
+            const date = new Date(scan.scan_date);
+            const formattedDate = date.toLocaleDateString();
+            const formattedTime = date.toLocaleTimeString();
+            const diseaseName = scan.disease_name || 'No Disease Detected';
+            const confidence = scan.confidence ? `${(scan.confidence * 100).toFixed(1)}%` : 'N/A';
+            const isHealthy = !scan.disease_name || scan.disease_name === 'Healthy';
+            
+            tableHTML += `
+                <tr>
+                    <td style="padding:8px; border:1px solid #ddd;">${formattedDate} ${formattedTime}</td>
+                    <td style="padding:8px; border:1px solid #ddd;">${scan.plant_type || currentPlant}</td>
+                    <td style="padding:8px; border:1px solid #ddd;">${diseaseName}</td>
+                    <td style="padding:8px; border:1px solid #ddd;">${confidence}</td>
+                    <td style="padding:8px; border:1px solid #ddd;">${isHealthy ? 'Healthy' : 'Diseased'}</td>
+                </tr>
+            `;
+        });
+        
+        tableHTML += '</tbody></table>';
+        
+        printWindow.document.write(`
+            <html>
+                <head>
+                    <title>${title}</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        h1 { color: #333; }
+                        .stats { margin: 10px 0; color: #666; }
+                    </style>
+                </head>
+                <body>
+                    <h1>${title}</h1>
+                    <div class="stats">${stats}</div>
+                    ${tableHTML}
+                    <script>
+                        window.onload = function() {
+                            window.print();
+                            setTimeout(function() {
+                                window.close();
+                            }, 500);
+                        }
+                    <\/script>
+                </body>
+            </html>
+        `);
+        printWindow.document.close();
+    }
+    
+    // Chart.js initialization for multiple charts
+    document.addEventListener('DOMContentLoaded', function() {
+        let plantData = {};
+
+        try {
+            const rawData = '{{ plants_data_json|escapejs }}';
+            plantData = JSON.parse(rawData || '{}');
+            console.log('Plant Data:', plantData);
+        } catch (e) {
+            console.error("Failed to parse plant data:", e);
+            plantData = {};
+        }
+        
+        const plantMappings = {
+            'Eggplant': 'eggplantChart',
+            'Tomato': 'tomatoChart', 
+            'Chili Pepper': 'chiliChart'
+        };
+
+        Object.keys(plantMappings).forEach(plantName => {
+            const canvasId = plantMappings[plantName];
+            const ctx = document.getElementById(canvasId);
+            
+            if (ctx && plantData[plantName]) {
+                const data = plantData[plantName];
+                console.log(`Creating chart for ${plantName}:`, data);
+                
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: data.labels,
+                        datasets: [{
+                            data: data.data,
+                            backgroundColor: data.colors || [
+                                '#4CAF50', '#FF5722', '#FBC02D', '#00796B', '#5E35B1',
+                                '#03A9F4', '#FF9800', '#CDDC39', '#607D8B', '#795548'
+                            ],
+                            borderColor: '#ffffff',
+                            borderWidth: 3,
+                            borderAlign: 'inner'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        cutout: '60%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: 'white',
+                                    font: {
+                                        size: 12,
+                                        family: "'Inter', sans-serif"
+                                    },
+                                    padding: 15,
+                                    usePointStyle: true,
+                                    pointStyle: 'circle'
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: `Total Scans: ${data.total_scans || 0}`,
+                                color: 'white',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        const label = context.label || '';
+                                        const value = context.parsed;
+                                        const total = context.dataset.data.reduce((sum, current) => sum + current, 0);
+                                        const percentage = total > 0 ? (value / total * 100).toFixed(1) : 0;
+                                        return `${label}: ${value} scan${value !== 1 ? 's' : ''} (${percentage}%)`;
+                                    }
+                                }
+                            }
+                        },
+                        animation: {
+                            animateScale: true,
+                            animateRotate: true
+                        }
+                    }
+                });
+            } else if (ctx) {
+                console.log(`No data for ${plantName}, creating empty chart`);
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['{% trans "No Scans Yet" %}'],
+                        datasets: [{
+                            data: [1],
+                            backgroundColor: ['#9E9E9E'],
+                            borderColor: '#ffffff',
+                            borderWidth: 3,
+                            borderAlign: 'inner'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: true,
+                        cutout: '60%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    color: 'white',
+                                    font: {
+                                        size: 12
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: '{% trans "No scans yet" %}',
+                                color: 'white',
+                                font: {
+                                    size: 14
+                                }
+                            },
+                            tooltip: {
+                                enabled: false
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    });
+    </script>
+</body>
+</html>

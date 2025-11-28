@@ -1,0 +1,381 @@
+{% load static %}
+{% load i18n %} {# Load i18n tags for translation #}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% trans "E.T.C. CAM" %}</title> {# Marked for translation #}
+    <link rel="icon" type="image/png" href="{% static 'img/ETC_LOGO2.png' %}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> {# Added Font Awesome for icons #}
+    <style>
+        /* Navigation styles */
+        .nav-link {
+            position: relative;
+            display: inline-block;
+            padding: 15px 25px;
+            font-size: 1.2rem;
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 0;
+            height: 3px;
+            background: white;
+            border-radius: 9999px;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            background-image: url('{% static 'img/background.jpg' %}');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            font-family: 'Inter', sans-serif; /* Using Inter font as per guidelines */
+        }
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
+        }
+        .service-card, .about-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            width: 100%;
+            max-width: 800px;
+        }
+        .service-card:hover, .about-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+        }
+        .service-card img, .about-card img {
+            height: 400px;
+            object-fit: cover;
+            width: 100%;
+        }
+        .action-btn {
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        /* Dropdown Styling for Language Selector */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: rgba(45, 55, 72, 0.9); /* Tailwind's gray-800 with transparency */
+            min-width: 120px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 0.5rem; /* rounded-lg */
+            overflow: hidden;
+            right: 0; /* Align dropdown to the right of the button */
+        }
+
+        .dropdown-content a {
+            color: white;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            text-align: left;
+            transition: background-color 0.2s ease;
+        }
+
+        .dropdown-content a:hover {
+            background-color: rgba(74, 85, 104, 0.9); /* Tailwind's gray-700 with transparency */
+        }
+
+        /* Show dropdown on hover (for desktop) */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        /* Mobile menu styles - only shows on small screens */
+        .mobile-menu-button {
+            display: none; /* Hidden by default */
+        }
+
+        .mobile-menu {
+            display: none; /* Hidden by default */
+            flex-direction: column;
+            position: absolute;
+            top: 60px; /* Adjust top position based on your navigation height */
+            right: 20px;
+            background: rgba(0, 0, 0, 0.9);
+            border-radius: 10px;
+            padding: 15px;
+            width: 150px; /* Adjust width as needed */
+            z-index: 100;
+        }
+        /* Ensure mobile menu is hidden on larger screens */
+        @media (min-width: 769px) {
+            .mobile-menu {
+                display: none !important;
+            }
+        }
+
+        .mobile-menu.active {
+            display: flex;
+        }
+
+        @media (max-width: 768px) {
+            /* Hide desktop menu on mobile */
+            .desktop-menu {
+                display: none;
+            }
+
+            /* Show mobile menu button on mobile */
+            .mobile-menu-button {
+                display: block;
+            }
+
+            /* Adjustments for mobile */
+            h1 {
+                font-size: 3rem !important;
+            }
+
+            .hero p {
+                font-size: 1.2rem !important;
+            }
+
+            .service-card img, .about-card img {
+                height: 300px;
+            }
+
+            .action-btn {
+                padding: 12px 25px;
+                font-size: 1.1rem;
+            }
+
+            /* Adjust navigation for mobile */
+            nav {
+                justify-content: flex-end; /* Push the button to the right */
+            }
+             .mobile-menu .dropdown-content {
+                position: static; /* Stack dropdown items normally in mobile menu */
+                width: 100%;
+                background-color: transparent; /* Remove background on mobile dropdown items */
+                box-shadow: none; /* Remove shadow */
+                border-radius: 0;
+            }
+            .mobile-menu .dropdown-content button {
+                 padding-left: 1rem; /* Indent dropdown items */
+            }
+             .desktop-menu .dropdown-content {
+                 right: auto; /* Reset right alignment for desktop menu */
+                 left: 0; /* Align dropdown to the left for desktop menu */
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 2.5rem !important;
+            }
+
+            .hero p {
+                font-size: 1.2rem !important;
+            }
+
+            .service-card img, .about-card img {
+                height: 250px;
+            }
+
+            .action-btn {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="fixed top-0 left-0 w-full flex justify-end p-8 text-white z-50">
+        <div class="desktop-menu flex items-center gap-6"> {# Added flex and gap for alignment #}
+            <a href="#services" class="nav-link">{% trans "SERVICES" %}</a>
+            <a href="#about" class="nav-link">{% trans "ABOUT" %}</a>
+            {# Language Dropdown Button for Desktop #}
+            <div class="dropdown">
+                <button class="bg-gray-700 text-white px-4 py-2 rounded shadow hover:bg-gray-600 focus:outline-none flex items-center gap-2">
+                    <i class="fas fa-globe"></i> {# Globe icon #}
+                    <span>{% trans "Language" %}</span>
+                    <i class="fas fa-caret-down ml-1"></i>
+                </button>
+                <form action="{% url 'set_language' %}" method="post" id="desktop-lang-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    <div class="dropdown-content">
+                        <button type="submit" name="language" value="en" class="block w-full text-left px-4 py-2 hover:bg-gray-700">English</button>
+                        <button type="submit" name="language" value="tl" class="block w-full text-left px-4 py-2 hover:bg-gray-700">Filipino</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <button class="mobile-menu-button p-2 focus:outline-none text-white" onclick="toggleMobileMenu()"> {# Added onclick handler #}
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+            </svg>
+        </button>
+
+        <div class="mobile-menu">
+            <a href="#services" class="nav-link">{% trans "SERVICES" %}</a>
+            <a href="#about" class="nav-link">{% trans "ABOUT" %}</a>
+            {# Language Dropdown Button for Mobile #}
+            <div class="dropdown">
+                <button class="bg-gray-700 text-white px-4 py-2 rounded shadow hover:bg-gray-600 focus:outline-none flex items-center gap-2 w-full text-left"> {# Added w-full and text-left for mobile dropdown consistency #}
+                    <i class="fas fa-globe"></i> {# Globe icon #}
+                    <span>{% trans "Language" %}</span>
+                    <i class="fas fa-caret-down ml-1"></i>
+                </button>
+                <form action="{% url 'set_language' %}" method="post" id="mobile-lang-form">
+                    {% csrf_token %}
+                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                    <div class="dropdown-content">
+                        <button type="submit" name="language" value="en" class="block w-full text-left px-4 py-2 hover:bg-gray-700">English</button>
+                        <button type="submit" name="language" value="tl" class="block w-full text-left px-4 py-2 hover:bg-gray-700">Filipino</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </nav>
+
+    <div class="relative h-screen flex flex-col items-center justify-center text-center text-white p-8 pt-24 hero">
+        <img src="{% static 'img/ETC_LOGO.png' %}" alt="Logo" class="w-64 mb-10">
+        <h1 class="text-6xl font-bold mb-4">{% trans "E.T.C. CAM" %}</h1> {# Marked for translation #}
+        <p class="text-2xl mt-2 mb-10">{% trans "ALMA VILLA, GLORIA, ORIENTAL MINDORO" %}</p> {# Marked for translation #}
+        <div class="mt-8 space-x-6">
+            <a href="{% url 'signup_page' %}" class="action-btn bg-black text-white hover:bg-gray-900 hover:shadow-xl">{% trans "SIGN UP" %}</a> {# Marked for translation #}
+            <a href="{% url 'login_page' %}" class="action-btn bg-green-600 text-white hover:bg-green-700 hover:shadow-xl">{% trans "LOGIN" %}</a> {# Marked for translation #}
+        </div>
+    </div>
+
+    <section id="services" class="min-h-screen flex items-center justify-center p-8 py-20">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto">
+            <div class="service-card">
+                <img src="{% static 'img/AR.jpg' %}" alt="Service 1" class="w-full">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "3D Visualization" %}</h3> {# Marked for translation #}
+                    <p class="text-lg text-gray-600">{% trans "ETC Cam has a feature that allows users to visualize 3D version of the plant through their devices." %}</p> {# Marked for translation #}
+                </div>
+            </div>
+            <div class="service-card">
+                <img src="{% static 'img/scan.jpg' %}" alt="Service 2" class="w-full">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "Scan Diseases" %}</h3> {# Marked for translation #}
+                    <p class="text-lg text-gray-600">{% trans "ETC Cam helps farmers quickly scan for diseases in eggplants, tomatoes, and chili pepper." %}</p> {# Marked for translation #}
+                </div>
+            </div>
+            <div class="service-card">
+                <img src="{% static 'img/dis.jpg' %}" alt="Service 3" class="w-full">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "Plant Disease Information" %}</h3> {# Marked for translation #}
+                    <p class="text-lg text-gray-600">{% trans "Provides comprehensive information about plant diseases for easy identification and treatment." %}</p> {# Marked for translation #}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="about" class="min-h-screen flex items-center justify-center p-8 py-20">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto">
+            <div class="about-card">
+                <img src="{% static 'img/cath.png' %}" alt="Person 1" class="w-full">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "Catherine Capillano" %}</h3> {# Marked for translation #}
+                    <p class="text-lg text-gray-600 mb-2">{% trans "UI/UX Designer, System Analyst" %}</p> {# Marked for translation #}
+                    <p class="text-lg text-gray-600 mb-2">catherinecapillano281@gmail.com</p>
+                    <p class="text-lg text-gray-600">{% trans "0905 356 1597" %}</p> {# Marked for translation, though numbers often aren't #}
+                </div>
+            </div>
+            <div class="about-card">
+                <img src="{% static 'img/jelah.png' %}" alt="Person 2" class="w-full">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "Jelah Quintana" %}</h3> {# Marked for translation #}
+                    <p class="text-lg text-gray-600 mb-2">{% trans "UI/UX Designer, Lead Developer" %}</p> {# Marked for translation #}
+                    <p class="text-lg text-gray-600 mb-2">jelahquintana@gmail.com</p>
+                    <p class="text-lg text-gray-600">{% trans "0995 531 9453" %}</p> {# Marked for translation #}
+                </div>
+            </div>
+            <div class="about-card">
+                <img src="{% static 'img/byron.png' %}" alt="Person 3" class="w-full">
+                <div class="p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "Jake Byron Orense" %}</h3> {# Marked for translation #}
+                    <p class="text-lg text-gray-600 mb-2">{% trans "System Analyst" %}</p> {# Marked for translation #}
+                    <p class="text-lg text-gray-600 mb-2">orensejakebyron19@gmail.com</p>
+                    <p class="text-lg text-gray-600">{% trans "0991 693 2972" %}</p> {# Marked for translation #}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        /**
+         * Toggles the visibility of the mobile navigation menu.
+         */
+        function toggleMobileMenu() {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        /**
+         * Closes the mobile navigation menu and language dropdown when a link is clicked.
+         */
+        document.addEventListener('DOMContentLoaded', function() {
+            const mobileMenuButton = document.querySelector('.mobile-menu-button');
+            const mobileMenu = document.querySelector('.mobile-menu');
+
+            // Close mobile menu when a link is clicked
+            const mobileLinks = mobileMenu.querySelectorAll('a');
+            mobileLinks.forEach(link => {
+                link.addEventListener('click', function() {
+                    mobileMenu.classList.remove('active');
+                });
+            });
+
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(event) {
+                const isClickInsideMobileMenu = mobileMenu.contains(event.target);
+                const isClickOnMobileMenuButton = mobileMenuButton.contains(event.target);
+                const isClickInsideDesktopDropdown = document.querySelector('.desktop-menu .dropdown').contains(event.target);
+
+                if (!isClickInsideMobileMenu && !isClickOnMobileMenuButton && !isClickInsideDesktopDropdown && mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                }
+            });
+
+            // Hide mobile menu on scroll
+            window.addEventListener('scroll', function() {
+                if (mobileMenu.classList.contains('active')) {
+                    mobileMenu.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
