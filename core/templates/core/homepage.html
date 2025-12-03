@@ -7,35 +7,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% trans "E.T.C. CAM" %}</title> {# Marked for translation #}
     <link rel="icon" type="image/png" href="{% static 'img/ETC_LOGO2.png' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet"> 
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> {# Added Font Awesome for icons #}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* Navigation styles */
-        .nav-link {
-            position: relative;
-            display: inline-block;
-            padding: 15px 25px;
-            font-size: 1.2rem;
-            color: white;
-            text-decoration: none;
-            font-weight: 600;
-        }
-        .nav-link::after {
-            content: "";
-            position: absolute;
-            left: 50%;
-            bottom: 0;
-            width: 0;
-            height: 3px;
-            background: white;
-            border-radius: 9999px;
-            transition: width 0.3s ease, left 0.3s ease;
-        }
-        .nav-link:hover::after {
-            width: 100%;
-            left: 0;
-        }
+        .nav-bg { background-color: #52533c; } /* Dark Olive */
+        .login-btn-bg { background-color: #5b913a; } /* Darker Plain Green */
+        .signup-btn-bg { background-color: #a09a8b; } /* Muted Gray-Green */
+        .footer-bg { background-color: #d9d9d9; } /* Very Light Gray */
 
+        /* BASE STYLES */
         html {
             scroll-behavior: smooth;
         }
@@ -45,7 +26,8 @@
             background-position: center;
             background-attachment: fixed;
             margin: 0;
-            font-family: 'Inter', sans-serif; /* Using Inter font as per guidelines */
+            font-family: 'Inter', sans-serif;
+            color: #333; 
         }
         body::before {
             content: "";
@@ -54,325 +36,493 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.9);
             z-index: -1;
         }
-        .service-card, .about-card {
+        
+        /* NAVIGATION BAR STYLES */
+        .nav-link {
+            position: relative;
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1rem;
+            color: white; 
+            text-decoration: none;
+            font-weight: 500;
+            background: transparent;
+            border: none;
+        }
+        .nav-link::after {
+            content: "";
+            position: absolute;
+            left: 50%;
+            bottom: 0;
+            width: 0;
+            height: 3px;
+            background: #d1d5db; 
+            border-radius: 9999px;
+            transition: width 0.3s ease, left 0.3s ease;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+            left: 0;
+        }
+
+        /* CARD STYLES */
+        .content-card {
             background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
             overflow: hidden;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             width: 100%;
-            max-width: 800px;
         }
-        .service-card:hover, .about-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.25);
+        .content-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
         }
-        .service-card img, .about-card img {
-            height: 400px;
+        .card-img {
+            height: 250px; 
             object-fit: cover;
             width: 100%;
         }
-        .action-btn {
-            padding: 15px 30px;
-            font-size: 1.2rem;
+
+        /* BUTTON STYLES */
+        .primary-btn {
+            padding: 10px 20px;
+            font-size: 1rem;
             font-weight: 600;
-            border-radius: 10px;
+            border-radius: 8px;
             transition: all 0.3s ease;
         }
-
-        /* Dropdown Styling for Language Selector */
-        .dropdown {
-            position: relative;
-            display: inline-block;
+        .primary-btn:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+        
+        /* HERO SECTION STYLES */
+        .welcome-area {
+            padding-top: calc(64px + 80px); 
+            background-color: white;
+            padding-bottom: 64px;
+        }
+        .hero-banner {
+            width: 100%;
+            height: 350px; 
+            object-fit: cover;
+            object-position: center;
         }
 
-        .dropdown-content {
-            display: none;
-            position: absolute;
-            background-color: rgba(45, 55, 72, 0.9); /* Tailwind's gray-800 with transparency */
-            min-width: 120px;
-            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-            z-index: 1;
-            border-radius: 0.5rem; /* rounded-lg */
-            overflow: hidden;
-            right: 0; /* Align dropdown to the right of the button */
+        /* LOGO RESPONSIVE */
+        .nav-logo {
+            height: 5rem;
+            width: auto;
+            filter: drop-shadow(0 0 4px rgba(0, 0, 0, 0.4));
+            flex-shrink: 0;
+        }
+        .nav-logo-large {
+            height: 10rem;
+            width: auto;
         }
 
-        .dropdown-content a {
-            color: white;
-            padding: 12px 16px;
-            text-decoration: none;
-            display: block;
-            text-align: left;
-            transition: background-color 0.2s ease;
-        }
-
-        .dropdown-content a:hover {
-            background-color: rgba(74, 85, 104, 0.9); /* Tailwind's gray-700 with transparency */
-        }
-
-        /* Show dropdown on hover (for desktop) */
-        .dropdown:hover .dropdown-content {
-            display: block;
-        }
-        /* Mobile menu styles - only shows on small screens */
+        /* MOBILE MENU STYLES */
         .mobile-menu-button {
-            display: none; /* Hidden by default */
+            display: none;
+            color: white;
+            background-color: transparent;
+            border: none;
+            padding: 8px;
+            flex-shrink: 0;
+            cursor: pointer;
         }
 
         .mobile-menu {
-            display: none; /* Hidden by default */
+            display: none;
             flex-direction: column;
             position: absolute;
-            top: 60px; /* Adjust top position based on your navigation height */
-            right: 20px;
-            background: rgba(0, 0, 0, 0.9);
-            border-radius: 10px;
-            padding: 15px;
-            width: 150px; /* Adjust width as needed */
-            z-index: 100;
-        }
-        /* Ensure mobile menu is hidden on larger screens */
-        @media (min-width: 769px) {
-            .mobile-menu {
-                display: none !important;
-            }
+            top: 100%;
+            right: 0;
+            left: 0;
+            background: #52533c;
+            border-radius: 0 0 6px 6px;
+            padding: 10px 0;
+            z-index: 99;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
         }
 
         .mobile-menu.active {
             display: flex;
         }
 
-        @media (max-width: 768px) {
-            /* Hide desktop menu on mobile */
-            .desktop-menu {
-                display: none;
-            }
+        .mobile-menu .nav-link {
+            padding: 12px 20px;
+            width: 100%;
+            text-align: left;
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            background: transparent;
+            border: none;
+            font-weight: 500;
+        }
 
-            /* Show mobile menu button on mobile */
+        .mobile-menu .nav-link:last-child {
+            border-bottom: none;
+        }
+
+        .mobile-menu .nav-link:hover,
+        .mobile-menu button.nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Language submenu styling */
+        #mobile-language-options {
+            display: none;
+            flex-direction: column;
+            background-color: #424636;
+            border-top: 1px solid rgba(255, 255, 255, 0.15);
+        }
+
+        #mobile-language-options button.nav-link {
+            padding-left: 2.5rem;
+            border-radius: 0 0 0.375rem 0.375rem;
+            font-weight: 400;
+        }
+
+        #mobile-language-button {
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            color: white;
+            font-weight: 500;
+            background: transparent;
+            border: none;
+            padding: 12px 20px;
+            font-size: 1rem;
+        }
+
+        #mobile-language-button i {
+            transition: transform 0.3s ease;
+        }
+
+        #mobile-language-button[aria-expanded="true"] i {
+            transform: rotate(180deg);
+        }
+
+
+        /* MEDIA QUERIES */
+        @media (max-width: 768px) {
+            .nav-container {
+                padding: 0 1rem;
+                justify-content: space-between;
+            }
+            .desktop-nav-links {
+                display: none !important;
+            }
             .mobile-menu-button {
                 display: block;
             }
-
-            /* Adjustments for mobile */
-            h1 {
-                font-size: 3rem !important;
+            .nav-logo {
+                height: 6rem;
             }
-
-            .hero p {
-                font-size: 1.2rem !important;
+            .primary-btn {
+                padding: 8px 16px;
+                font-size: 0.875rem;
+                min-width: 70px;
+                white-space: nowrap;
             }
-
-            .service-card img, .about-card img {
-                height: 300px;
-            }
-
-            .action-btn {
-                padding: 12px 25px;
-                font-size: 1.1rem;
-            }
-
-            /* Adjust navigation for mobile */
             nav {
-                justify-content: flex-end; /* Push the button to the right */
-            }
-             .mobile-menu .dropdown-content {
-                position: static; /* Stack dropdown items normally in mobile menu */
-                width: 100%;
-                background-color: transparent; /* Remove background on mobile dropdown items */
-                box-shadow: none; /* Remove shadow */
-                border-radius: 0;
-            }
-            .mobile-menu .dropdown-content button {
-                 padding-left: 1rem; /* Indent dropdown items */
-            }
-             .desktop-menu .dropdown-content {
-                 right: auto; /* Reset right alignment for desktop menu */
-                 left: 0; /* Align dropdown to the left for desktop menu */
+                height: 64px;
             }
         }
 
-        @media (max-width: 480px) {
-            h1 {
-                font-size: 2.5rem !important;
+        @media (min-width: 769px) {
+            .desktop-nav-links {
+                display: flex !important;
             }
-
-            .hero p {
-                font-size: 1.2rem !important;
+            .mobile-menu, .mobile-menu-button {
+                display: none !important;
             }
-
-            .service-card img, .about-card img {
-                height: 250px;
+            .nav-container {
+                padding: 0 3rem;
             }
-
-            .action-btn {
-                padding: 10px 20px;
-                font-size: 1rem;
+            .nav-logo {
+                height: 10rem;
             }
         }
     </style>
 </head>
 <body>
-    <nav class="fixed top-0 left-0 w-full flex justify-end p-8 text-white z-50">
-        <div class="desktop-menu flex items-center gap-6"> {# Added flex and gap for alignment #}
-            <a href="#services" class="nav-link">{% trans "SERVICES" %}</a>
-            <a href="#about" class="nav-link">{% trans "ABOUT" %}</a>
-            {# Language Dropdown Button for Desktop #}
-            <div class="dropdown">
-                <button class="bg-gray-700 text-white px-4 py-2 rounded shadow hover:bg-gray-600 focus:outline-none flex items-center gap-2">
-                    <i class="fas fa-globe"></i> {# Globe icon #}
-                    <span>{% trans "Language" %}</span>
-                    <i class="fas fa-caret-down ml-1"></i>
-                </button>
-                <form action="{% url 'set_language' %}" method="post" id="desktop-lang-form">
-                    {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                    <div class="dropdown-content">
-                        <button type="submit" name="language" value="en" class="block w-full text-left px-4 py-2 hover:bg-gray-700">English</button>
-                        <button type="submit" name="language" value="tl" class="block w-full text-left px-4 py-2 hover:bg-gray-700">Filipino</button>
+    <nav class="fixed top-0 left-0 w-full nav-bg text-white z-50 shadow-md flex items-center h-16">
+        <div class="nav-container flex items-center w-full max-w-7xl mx-auto">
+            
+            <!-- Logo: Always visible and responsive -->
+            <a href="#home" class="flex items-center mr-4">
+                <img src="{% static 'img/ETC_LOGO2.png' %}" alt="E.T.C. CAM Logo" class="nav-logo">
+            </a>
+
+            <div class="flex items-center gap-3 ml-auto">
+                
+                <!-- Desktop navigation links -->
+                <div class="desktop-nav-links flex items-center gap-4">
+                    <a href="#home" class="nav-link">{% trans "HOME" %}</a> 
+                    <a href="#services" class="nav-link">{% trans "OUR SERVICES" %}</a>
+                    <a href="#about" class="nav-link">{% trans "ABOUT US" %}</a>
+                    
+                    <!-- Desktop Language dropdown -->
+                    <div class="dropdown relative group">
+                        <button class="bg-transparent text-white px-3 py-1 rounded hover:bg-gray-600 focus:outline-none flex items-center gap-1 transition-colors duration-200">
+                            <i class="fas fa-globe"></i>
+                            <span>{% trans "Language" %}</span>
+                            <i class="fas fa-caret-down text-sm ml-1"></i>
+                        </button>
+                        <form action="{% url 'set_language' %}" method="post" class="absolute right-0 mt-2 w-32 bg-gray-700 rounded-lg shadow-xl hidden group-hover:block" id="desktop-lang-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                            <div class="py-1">
+                                <button type="submit" name="language" value="en" class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800">English</button>
+                                <button type="submit" name="language" value="tl" class="block w-full text-left px-4 py-2 text-sm text-white hover:bg-gray-800">Filipino</button>
+                            </div>
+                        </form>
                     </div>
-                </form>
+                </div>
+
+                <!-- Login Button -->
+                <a href="{% url 'login_page' %}" class="primary-btn login-btn-bg text-white hover:opacity-85">{% trans "Login" %}</a>
+
+                <!-- Mobile burger menu button -->
+                <button class="mobile-menu-button focus:outline-none" aria-label="Toggle menu">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
             </div>
-        </div>
 
-        <button class="mobile-menu-button p-2 focus:outline-none text-white" onclick="toggleMobileMenu()"> {# Added onclick handler #}
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
-            </svg>
-        </button>
-
-        <div class="mobile-menu">
-            <a href="#services" class="nav-link">{% trans "SERVICES" %}</a>
-            <a href="#about" class="nav-link">{% trans "ABOUT" %}</a>
-            {# Language Dropdown Button for Mobile #}
-            <div class="dropdown">
-                <button class="bg-gray-700 text-white px-4 py-2 rounded shadow hover:bg-gray-600 focus:outline-none flex items-center gap-2 w-full text-left"> {# Added w-full and text-left for mobile dropdown consistency #}
-                    <i class="fas fa-globe"></i> {# Globe icon #}
-                    <span>{% trans "Language" %}</span>
-                    <i class="fas fa-caret-down ml-1"></i>
+            <!-- Mobile menu dropdown -->
+            <div class="mobile-menu nav-bg" aria-hidden="true">
+                <a href="#home" class="nav-link">{% trans "HOME" %}</a>
+                <a href="#services" class="nav-link">{% trans "OUR SERVICES" %}</a>
+                <a href="#about" class="nav-link">{% trans "ABOUT US" %}</a>
+                
+                <!-- Mobile Language dropdown button -->
+                <button type="button" class="nav-link" id="mobile-language-button" aria-expanded="false" aria-controls="mobile-language-options">
+                    {% trans "Language" %}
+                    <i class="fas fa-caret-down"></i>
                 </button>
-                <form action="{% url 'set_language' %}" method="post" id="mobile-lang-form">
-                    {% csrf_token %}
-                    <input type="hidden" name="next" value="{{ request.get_full_path }}">
-                    <div class="dropdown-content">
-                        <button type="submit" name="language" value="en" class="block w-full text-left px-4 py-2 hover:bg-gray-700">English</button>
-                        <button type="submit" name="language" value="tl" class="block w-full text-left px-4 py-2 hover:bg-gray-700">Filipino</button>
-                    </div>
-                </form>
+                <div id="mobile-language-options">
+                    <form action="{% url 'set_language' %}" method="post" class="w-full">
+                        {% csrf_token %}
+                        <input type="hidden" name="next" value="{{ request.get_full_path }}">
+                        <button type="submit" name="language" value="en" class="nav-link block w-full text-left">{% trans "English" %}</button>
+                        <button type="submit" name="language" value="tl" class="nav-link block w-full text-left">{% trans "Filipino" %}</button>
+                    </form>
+                </div>
             </div>
         </div>
     </nav>
 
-    <div class="relative h-screen flex flex-col items-center justify-center text-center text-white p-8 pt-24 hero">
-        <img src="{% static 'img/ETC_LOGO.png' %}" alt="Logo" class="w-64 mb-10">
-        <h1 class="text-6xl font-bold mb-4">{% trans "E.T.C. CAM" %}</h1> {# Marked for translation #}
-        <p class="text-2xl mt-2 mb-10">{% trans "ALMA VILLA, GLORIA, ORIENTAL MINDORO" %}</p> {# Marked for translation #}
-        <div class="mt-8 space-x-6">
-            <a href="{% url 'signup_page' %}" class="action-btn bg-black text-white hover:bg-gray-900 hover:shadow-xl">{% trans "SIGN UP" %}</a> {# Marked for translation #}
-            <a href="{% url 'login_page' %}" class="action-btn bg-green-600 text-white hover:bg-green-700 hover:shadow-xl">{% trans "LOGIN" %}</a> {# Marked for translation #}
+    <!-- Content remains unchanged -->
+
+    <div class="welcome-area" id="home">
+        <div class="max-w-5xl mx-auto px-8 text-center">
+            <h1 class="text-4xl font-extrabold mb-3 text-gray-800">{% trans "Welcome Dear Farmer," %}</h1>
+            <p class="text-xl mb-6 max-w-3xl mx-auto text-gray-600">{% trans "Are you having problem in identifying the disease of your crop? Worry no more! E.T.C. Cam got you covered through augmented camera for better future." %}</p>
+            
+            <div class="mt-4 mb-8">
+                <a href="{% url 'signup_page' %}" class="primary-btn signup-btn-bg text-gray-800 hover:opacity-85 text-xl font-bold">{% trans "Sign Up" %}</a>
+            </div>
+
+            <p class="text-gray-500 text-sm">
+                {% trans "Already have an account?" %} <a href="{% url 'login_page' %}" class="font-semibold text-green-600 hover:underline">{% trans "Login Here" %}</a>
+            </p>
         </div>
     </div>
+    
+    <div class="w-full shadow-lg">
+        <img src="{% static 'img/background.jpg' %}" alt="Crop Background Banner" class="hero-banner">
+    </div>
 
-    <section id="services" class="min-h-screen flex items-center justify-center p-8 py-20">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto">
-            <div class="service-card">
-                <img src="{% static 'img/AR.jpg' %}" alt="Service 1" class="w-full">
-                <div class="p-8">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "3D Visualization" %}</h3> {# Marked for translation #}
-                    <p class="text-lg text-gray-600">{% trans "ETC Cam has a feature that allows users to visualize 3D version of the plant through their devices." %}</p> {# Marked for translation #}
-                </div>
+    <section class="py-16">
+        <div class="max-w-5xl mx-auto p-8 bg-white/90 rounded-lg shadow-xl">
+            <h2 class="text-3xl font-bold text-gray-800 mb-6 border-b pb-2">{% trans "What is E.T.C. Cam?" %}</h2>
+            <div class="text-lg text-gray-600 leading-relaxed">
+                <p>
+                    {% blocktrans %}
+                    E.T.C. stands for Eggplant, Tomato, and Chili pepper. It is a Digital Crop Health Scanner, designed to give farmers instant, accurate diagnosis of common diseases affecting eggplant, tomato, and chili peppers. It uses smart technology to analyze a simple photo of a sick leaf and immediately tell you the problem, so you can apply the right treatment right away. We built E.T.C. Cam to help you stop diseases from spreading quickly, minimize crop losses, and save money by ensuring you use the correct intervention from the very start. Think of it as having an instant plant doctor available in the field to protect your harvest.
+                    {% endblocktrans %}
+                </p>
             </div>
-            <div class="service-card">
-                <img src="{% static 'img/scan.jpg' %}" alt="Service 2" class="w-full">
-                <div class="p-8">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "Scan Diseases" %}</h3> {# Marked for translation #}
-                    <p class="text-lg text-gray-600">{% trans "ETC Cam helps farmers quickly scan for diseases in eggplants, tomatoes, and chili pepper." %}</p> {# Marked for translation #}
+        </div>
+    </section>
+
+    <section id="services" class="py-16 bg-gray-100/90">
+        <div class="max-w-5xl mx-auto p-8 text-center">
+            <h2 class="text-3xl font-bold text-gray-800 mb-10 border-b pb-2">{% trans "What can E.T.C. Cam do?" %}</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="content-card">
+                    <img src="{% static 'img/AR.jpg' %}" alt="3D Visualization" class="card-img">
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold text-green-700 mb-3">{% trans "3D Visualization" %}</h3> 
+                        <p class="text-base text-gray-600">{% trans "Utilize Augmented Reality (AR) to visualize interactive 3D models of the plant directly in your environment." %}</p> 
+                    </div>
                 </div>
-            </div>
-            <div class="service-card">
-                <img src="{% static 'img/dis.jpg' %}" alt="Service 3" class="w-full">
-                <div class="p-8">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "Plant Disease Information" %}</h3> {# Marked for translation #}
-                    <p class="text-lg text-gray-600">{% trans "Provides comprehensive information about plant diseases for easy identification and treatment." %}</p> {# Marked for translation #}
+                <div class="content-card">
+                    <img src="{% static 'img/scan.jpg' %}" alt="Scan Diseases" class="card-img">
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold text-green-700 mb-3">{% trans "Instant Disease Scanning" %}</h3> 
+                        <p class="text-base text-gray-600">{% trans "Quickly scan for diseases in eggplants, tomatoes, and chili pepper using our AI-powered detection system." %}</p> 
+                    </div>
+                </div>
+                <div class="content-card">
+                    <img src="{% static 'img/dis.jpg' %}" alt="Plant Disease Information" class="card-img">
+                    <div class="p-5">
+                        <h3 class="text-xl font-bold text-green-700 mb-3">{% trans "Disease Treatment Info" %}</h3> 
+                        <p class="text-base text-gray-600">{% trans "Provides comprehensive information about plant diseases, symptoms, and recommended treatments." %}</p> 
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="about" class="min-h-screen flex items-center justify-center p-8 py-20">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-10 max-w-7xl mx-auto">
-            <div class="about-card">
-                <img src="{% static 'img/cath.png' %}" alt="Person 1" class="w-full">
-                <div class="p-8">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "Catherine Capillano" %}</h3> {# Marked for translation #}
-                    <p class="text-lg text-gray-600 mb-2">{% trans "UI/UX Designer, System Analyst" %}</p> {# Marked for translation #}
-                    <p class="text-lg text-gray-600 mb-2">catherinecapillano281@gmail.com</p>
-                    <p class="text-lg text-gray-600">{% trans "0905 356 1597" %}</p> {# Marked for translation, though numbers often aren't #}
+    <section id="about" class="py-16">
+        <div class="max-w-5xl mx-auto p-8 bg-white/90 rounded-lg shadow-xl">
+            <h2 class="text-3xl font-bold text-gray-800 mb-10 border-b pb-2 text-center">{% trans "Meet the team that is behind this sucessful project." %}</h2>
+            
+            <div class="space-y-12">
+                <div class="flex flex-col md:flex-row items-center content-card p-6 shadow-md border border-gray-100">
+                    <img src="{% static 'img/jelah_id-pic.png' %}" alt="Jelah Quintana" class="w-40 h-40 object-cover rounded-full md:mr-6 mb-4 md:mb-0 border-4 border-green-500">
+                    <div class="text-center md:text-left flex-grow">
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">{% trans "Jelah Quintana" %}</h3> 
+                        <p class="text-lg font-semibold text-green-700 mb-1">{% trans "Project Leader, Lead Programmer" %}</p> 
+                        <p class="text-sm text-gray-600 mt-2">{% trans "Meet Ms. Jelah Joy L. Quintana, the Project Leader. She is the Backend Developer of this project. The mastermind behind the functionality of how the users interact with this web app." %}</p>
+                        <p class="text-sm font-semibold text-green-700 mb-1 mt-3">{% trans "Contact Information:" %}</p> 
+                        <p class="text-sm text-gray-500 mb-1">Email: jelahquintana@gmail.com</p>
+                        <p class="text-sm text-gray-500 mb-1">{% trans "Phone Number: 0995 531 9453" %}</p> 
+                        <p class="text-sm text-gray-700">
+                            <a href="https://www.facebook.com/share/17X7R5KLtd/" target="_blank" class="text-blue-600 hover:underline flex items-center justify-center md:justify-start">
+                                <i class="fab fa-facebook-square mr-1"></i> Jelah Quintana
+                            </a>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="about-card">
-                <img src="{% static 'img/jelah.png' %}" alt="Person 2" class="w-full">
-                <div class="p-8">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "Jelah Quintana" %}</h3> {# Marked for translation #}
-                    <p class="text-lg text-gray-600 mb-2">{% trans "UI/UX Designer, Lead Developer" %}</p> {# Marked for translation #}
-                    <p class="text-lg text-gray-600 mb-2">jelahquintana@gmail.com</p>
-                    <p class="text-lg text-gray-600">{% trans "0995 531 9453" %}</p> {# Marked for translation #}
+                
+                <div class="flex flex-col md:flex-row-reverse items-center content-card p-6 shadow-md border border-gray-100">
+                    <img src="{% static 'img/Cath pic.jpg' %}" alt="Catherine Capillano" class="w-40 h-40 object-cover rounded-full md:ml-6 mb-4 md:mb-0 border-4 border-green-500">
+                    <div class="text-center md:text-right flex-grow">
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">{% trans "Catherine Capillano" %}</h3> 
+                        <p class="text-lg font-semibold text-green-700 mb-1">{% trans "UI/UX Designer, System Analyst" %}</p> 
+                        <p class="text-sm text-gray-600 mt-2">{% trans "Meet Ms. Catherine L. Capillano, the System Analyst. She is also the Frontend Developer of this project, responsible for building an intuitive and user-friendly interface." %}</p>
+                        <p class="text-sm font-semibold text-green-700 mb-1 mt-3">{% trans "Contact Information:" %}</p> 
+                        <p class="text-sm text-gray-500 mb-1">Email: catherinecapillano281@gmail.com</p>
+                        <p class="text-sm text-gray-500 mb-1">{% trans "Phone Number: 0905 356 1597" %}</p> 
+                        <p class="text-sm text-gray-700">
+                            <a href="https://www.facebook.com/share/1GrxajzhiM/" target="_blank" class="text-blue-600 hover:underline flex items-center justify-center md:justify-end">
+                                <i class="fab fa-facebook-square mr-1"></i> Catherine Landicho Capillano
+                            </a>
+                        </p>
+                    </div>
                 </div>
-            </div>
-            <div class="about-card">
-                <img src="{% static 'img/byron.png' %}" alt="Person 3" class="w-full">
-                <div class="p-8">
-                    <h3 class="text-2xl font-bold text-gray-800 mb-4">{% trans "Jake Byron Orense" %}</h3> {# Marked for translation #}
-                    <p class="text-lg text-gray-600 mb-2">{% trans "System Analyst" %}</p> {# Marked for translation #}
-                    <p class="text-lg text-gray-600 mb-2">orensejakebyron19@gmail.com</p>
-                    <p class="text-lg text-gray-600">{% trans "0991 693 2972" %}</p> {# Marked for translation #}
+
+                <div class="flex flex-col md:flex-row items-center content-card p-6 shadow-md border border-gray-100">
+                    <img src="{% static 'img/byron2.png' %}" alt="Jake Byron Orense" class="w-40 h-40 object-cover rounded-full md:mr-6 mb-4 md:mb-0 border-4 border-green-500">
+                    <div class="text-center md:text-left flex-grow">
+                        <h3 class="text-xl font-bold text-gray-900 mb-1">{% trans "Jake Byron Orense" %}</h3> 
+                        <p class="text-lg font-semibold text-green-700 mb-1">{% trans "System Analyst" %}</p> 
+                        <p class="text-sm text-gray-600 mt-2">{% trans "Meet Mr. Jake Byron P. Orense, the Quality Assurance in charge, who focuses on monitoring the team's goals and objectives of this project to run smoothly." %}</p>
+                        <p class="text-sm font-semibold text-green-700 mb-1 mt-3">{% trans "Contact Information:" %}</p> 
+                        <p class="text-sm text-gray-500 mb-1">Email: orensejakebyron19@gmail.com</p>
+                        <p class="text-sm text-gray-500 mb-1">{% trans "Phone Number: 0991 693 2972" %}</p> 
+                        <p class="text-sm text-gray-700">
+                            <a href="https://www.facebook.com/share/16PCmMmziZ/" target="_blank" class="text-blue-600 hover:underline flex items-center justify-center md:justify-start">
+                                <i class="fab fa-facebook-square mr-1"></i> Jake Byron Orense
+                            </a>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
+
+    <section class="py-16 bg-gray-100/90 text-center">
+        <div class="max-w-4xl mx-auto px-8 border-t border-b py-8 border-gray-300">
+            <h2 class="text-2xl font-bold mb-4">{% trans "Tired of checking the disease of your plant manually?" %}</h2>
+            <p class="text-xl font-light mb-6">
+                {% trans "Want an automatic disease detector that will provide you with the disease information and treatment in just a few seconds? Tired of big crop loss and low income?" %}
+            </p>
+            <h3 class="text-2xl font-extrabold text-green-700 mb-6">{% trans "If your answer is YES, the door is open for you to join." %}</h3>
+            
+            <a href="{% url 'signup_page' %}" class="primary-btn signup-btn-bg text-gray-800 hover:opacity-85 text-xl font-bold">{% trans "Join Now!" %}</a>
+        </div>
+    </section>
+
+    <footer class="footer-bg p-4 text-center text-sm text-gray-600">
+        <p>{% trans "Brought to you by BSIT 4th Year - Capstone Project - Group 3" %}</p>
+        <p>&copy; {% now "Y" %} E.T.C. Cam. {% trans "All Rights Reserved" %}.</p>
+    </footer>
 
     <script>
-        /**
-         * Toggles the visibility of the mobile navigation menu.
-         */
-        function toggleMobileMenu() {
-            const mobileMenu = document.querySelector('.mobile-menu');
-            mobileMenu.classList.toggle('active');
-        }
-
-        /**
-         * Closes the mobile navigation menu and language dropdown when a link is clicked.
-         */
         document.addEventListener('DOMContentLoaded', function() {
             const mobileMenuButton = document.querySelector('.mobile-menu-button');
             const mobileMenu = document.querySelector('.mobile-menu');
+            const langButton = document.getElementById('mobile-language-button');
+            const langOptions = document.getElementById('mobile-language-options');
 
-            // Close mobile menu when a link is clicked
-            const mobileLinks = mobileMenu.querySelectorAll('a');
-            mobileLinks.forEach(link => {
-                link.addEventListener('click', function() {
+            // Toggle mobile menu visibility
+            mobileMenuButton.addEventListener('click', () => {
+                const isActive = mobileMenu.classList.toggle('active');
+                mobileMenu.setAttribute('aria-hidden', !isActive);
+                // Close language submenu when mobile menu toggled
+                langOptions.style.display = 'none';
+                langButton.setAttribute('aria-expanded', 'false');
+            });
+
+            // Toggle language submenu inside mobile menu
+            langButton.addEventListener('click', () => {
+                const isHidden = langOptions.style.display === 'none' || langOptions.style.display === '';
+                if (isHidden) {
+                    langOptions.style.display = 'flex';
+                    langButton.setAttribute('aria-expanded', 'true');
+                } else {
+                    langOptions.style.display = 'none';
+                    langButton.setAttribute('aria-expanded', 'false');
+                }
+            });
+
+            // Close menu when any link or language option is clicked
+            const clickableItems = mobileMenu.querySelectorAll('a, button[type="submit"]');
+            clickableItems.forEach(item => {
+                item.addEventListener('click', () => {
                     mobileMenu.classList.remove('active');
+                    mobileMenu.setAttribute('aria-hidden', 'true');
+                    langOptions.style.display = 'none';
+                    langButton.setAttribute('aria-expanded', 'false');
                 });
             });
 
             // Close mobile menu when clicking outside
-            document.addEventListener('click', function(event) {
-                const isClickInsideMobileMenu = mobileMenu.contains(event.target);
-                const isClickOnMobileMenuButton = mobileMenuButton.contains(event.target);
-                const isClickInsideDesktopDropdown = document.querySelector('.desktop-menu .dropdown').contains(event.target);
-
-                if (!isClickInsideMobileMenu && !isClickOnMobileMenuButton && !isClickInsideDesktopDropdown && mobileMenu.classList.contains('active')) {
+            document.addEventListener('click', event => {
+                if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target)) {
                     mobileMenu.classList.remove('active');
+                    mobileMenu.setAttribute('aria-hidden', 'true');
+                    langOptions.style.display = 'none';
+                    langButton.setAttribute('aria-expanded', 'false');
                 }
             });
 
-            // Hide mobile menu on scroll
-            window.addEventListener('scroll', function() {
-                if (mobileMenu.classList.contains('active')) {
+            // Close on scroll
+            window.addEventListener('scroll', () => {
+                mobileMenu.classList.remove('active');
+                mobileMenu.setAttribute('aria-hidden', 'true');
+                langOptions.style.display = 'none';
+                langButton.setAttribute('aria-expanded', 'false');
+            });
+
+            // Close on resize (desktop view)
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) {
                     mobileMenu.classList.remove('active');
+                    mobileMenu.setAttribute('aria-hidden', 'true');
+                    langOptions.style.display = 'none';
+                    langButton.setAttribute('aria-expanded', 'false');
                 }
             });
         });
