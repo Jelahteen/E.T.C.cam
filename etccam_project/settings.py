@@ -3,6 +3,7 @@
 import os
 from pathlib import Path
 from django.core.management.utils import get_random_secret_key
+import dj_database_url  # MOVED TO TOP - REQUIRED FOR RENDER POSTGRESQL
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -84,24 +85,23 @@ WSGI_APPLICATION = "etccam_project.wsgi.application"
 # Database
 # -----------------------------------------------------------------------------
 # Development: your Laragon MySQL (local)
-# Production: use DATABASE_URL (Render or other cloud DB)
+# Production: use DATABASE_URL (Render PostgreSQL)
 # -----------------------------------------------------------------------------
 
 # Flag to detect if DATABASE_URL is configured (for Render / production)
 DATABASE_URL = os.environ.get("DATABASE_URL")
 
 if DATABASE_URL:
-    import dj_database_url
-
+    # PRODUCTION: Render PostgreSQL (ssl_require=True REQUIRED)
     DATABASES = {
         "default": dj_database_url.config(
             default=DATABASE_URL,
             conn_max_age=600,
-            ssl_require=False,  # set True if your DB requires SSL
+            ssl_require=True,  # FIXED: Render PostgreSQL REQUIRES SSL
         )
     }
 else:
-    # Fallback to local Laragon MySQL (development)
+    # LOCAL DEVELOPMENT: Your Laragon MySQL
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
@@ -115,6 +115,10 @@ else:
             },
         }
     }
+
+# -----------------------------------------------------------------------------
+# Password validation
+# -----------------------------------------------------------------------------
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -131,6 +135,10 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+# -----------------------------------------------------------------------------
+# Internationalization
+# -----------------------------------------------------------------------------
+
 LANGUAGE_CODE = "en-us"
 TIME_ZONE = "UTC"
 USE_I18N = True
@@ -145,10 +153,16 @@ LOCALE_PATHS = [
     os.path.join(BASE_DIR, "locale"),
 ]
 
+# -----------------------------------------------------------------------------
+# Static & Media files
+# -----------------------------------------------------------------------------
+
 STATIC_URL = "static/"
 
+# Folder where collectstatic will put compiled static files (for Render)
 STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
 
+# Additional static folders (development & app-level)
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
     os.path.join(BASE_DIR, "ar_visualization", "static"),
@@ -157,7 +171,15 @@ STATICFILES_DIRS = [
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
+# -----------------------------------------------------------------------------
+# Default primary key field type
+# -----------------------------------------------------------------------------
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# -----------------------------------------------------------------------------
+# Auth redirects
+# -----------------------------------------------------------------------------
 
 LOGIN_REDIRECT_URL = "dashboard_page"
 LOGIN_URL = "login_page"
