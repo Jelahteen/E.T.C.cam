@@ -22,14 +22,14 @@ SECRET_KEY = os.environ.get(
 DEBUG = os.environ.get("DJANGO_DEBUG", "False").lower() == "true"
 
 # Hosts – include Render host automatically if available
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [https://e-t-c-cam.onrender.com]
 
 RENDER_EXTERNAL_HOSTNAME = os.environ.get("RENDER_EXTERNAL_HOSTNAME")
 if RENDER_EXTERNAL_HOSTNAME:
     ALLOWED_HOSTS.append(RENDER_EXTERNAL_HOSTNAME)
 
 # Optional: allow localhost/127.0.0.1 for development
-ALLOWED_HOSTS += ["localhost", "127.0.0.1", "e-t-c-cam.onrender.com"]
+# ALLOWED_HOSTS += ["localhost", "127.0.0.1", "e-t-c-cam.onrender.com"]
 
 # -----------------------------------------------------------------------------
 # Application definition
