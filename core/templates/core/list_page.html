@@ -1,167 +1,126 @@
+{% load i18n %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    {% load i18n %} {# Load i18n tags for translation #}
-    {% load static %}
     <title>{% trans "List of Diseases" %} - E.T.C. CAM</title>
     <link rel="icon" type="image/png" href="{% static 'img/ETC_LOGO2.png' %}">
     <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
     <style>
-        /* Global Styles */
-        html {
-            scroll-behavior: smooth;
-        }
+        html { scroll-behavior: smooth; }
+
         body {
-            background-image: url('{% static 'img/background.jpg' %}');
+            background-image: url('{% static "img/background.jpg" %}');
             background-size: cover;
             background-position: center;
             background-attachment: fixed;
-            color: white;
-            font-family: 'Inter', sans-serif; /* Using Inter font as per guidelines */
+            margin: 0;
+            font-family: 'Inter', sans-serif;
+            color: #111827;
         }
         body::before {
             content: "";
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            inset: 0;
+            background: rgba(255,255,255,0.9);
             z-index: -1;
         }
 
-        /* Navbar Styling */
-        nav {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            font-weight: 600;
-            background: rgba(0, 0, 0, 0.3);
-            z-index: 10;
-        }
-        nav .logo-link {
-            font-size: 1.5rem;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            text-decoration: none;
-            color: white; /* Added color for consistency */
-        }
-        nav a.logo-link img {
-            width: auto;
-            height: 4rem;
-            margin-right: 0.5rem;
-            object-fit: contain;
-        }
-        .nav-actions {
-            display: flex;
-            gap: 1rem;
-            align-items: center; /* Align items vertically */
-        }
-        .nav-actions a {
+        .nav-bg { background-color: #52533c; }
+
+        .nav-link {
+            position: relative;
+            display: inline-block;
+            padding: 10px 15px;
+            font-size: 1rem;
             color: white;
             text-decoration: none;
-            padding: 0.5rem 1rem;
-            position: relative;
+            font-weight: 500;
         }
-        .nav-actions a::after {
+        .nav-link::after {
             content: "";
             position: absolute;
             left: 50%;
-            bottom: -3px;
+            bottom: 0;
             width: 0;
             height: 3px;
-            background: rgba(255, 255, 255, 0.7);
+            background: #d1d5db;
             border-radius: 9999px;
             transition: width 0.3s ease, left 0.3s ease;
         }
-        .nav-actions a:hover::after {
-            width: 100%;
-            left: 0;
+        .nav-link:hover::after { width: 100%; left: 0; }
+
+        .primary-btn {
+            padding: 0.5rem 1.2rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            background-color: #5b913a;
+            color: white;
+            transition: all 0.3s ease;
+        }
+        .primary-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
         }
 
-        /* Disease Card Styling */
+        .nav-logo {
+            height: 10rem;
+            width: auto;
+            filter: drop-shadow(0 0 4px rgba(0,0,0,0.4));
+        }
+
+        /* Mobile home icon button */
+        .home-icon-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 9999px;
+            border: 2px solid #ffffff;
+            color: #ffffff;
+            background: transparent;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+        .home-icon-btn:hover {
+            background-color: rgba(255,255,255,0.1);
+            transform: translateY(-1px);
+        }
+
         .disease-card {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            padding: 18px;
             text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.08);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
             cursor: pointer;
         }
         .disease-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            transform: translateY(-4px);
+            box-shadow: 0 8px 16px rgba(0,0,0,0.12);
         }
 
-        /* Responsive Styles for Navbar */
-        @media (max-width: 768px) {
-            .nav-actions a.back-button-text {
-                display: none;
-            }
-            .nav-actions a.back-button-icon {
-                display: flex !important;
-                align-items: center;
-                text-align: center;
-                justify-content: center;
-                background-color: rgba(255, 255, 255, 0.2);
-                border: 2px solid white;
-                border-radius: 50%;
-                width: 40px;
-                height: 40px;
-                padding: 0;
-            }
-            .nav-actions a.back-button-icon i {
-                font-size: 1.2rem;
-            }
-        }
-
-        /* Initially hide the icon button */
-        .nav-actions a.back-button-icon {
-            display: none;
-        }
-        /* Transparent Header styles */
-        .transparent-header-spacer {
-            width: 100%;
-            height: 96px; /* Adjusted height for fixed nav */
-            background-color: rgba(0, 0, 0, 0.5);
-            position: fixed; /* Keep it fixed to create space below the nav */
-            top: 0;
-            left: 0;
-            z-index: 5;
-        }
-
-        /* Modal specific styling to match dashboard */
-        #diseaseModal .bg-white {
-            background-color: rgba(45, 62, 47, 0.9); /* Dark green, slightly transparent */
-            color: white; /* White text for modal content */
+        #diseaseModal .modal-panel {
+            background-color: rgba(45,62,47,0.95);
+            color: white;
             border-radius: 0.75rem;
         }
         #diseaseModal h2, #diseaseModal h3 {
-            color: #e0f2f7; /* Light blue-green for headings */
+            color: #e0f2f7;
         }
         #diseaseModal p {
-            color: #d1fae5; /* Lighter green for text */
-        }
-        #diseaseModal button {
-            background-color: #10B981; /* Green button */
-            transition: background-color 0.3s ease;
-        }
-        #diseaseModal button:hover {
-            background-color: #059669; /* Darker green on hover */
+            color: #d1fae5;
         }
 
-        /* Full Image Modal Styling */
-        #imageModal .bg-white {
-            background-color: rgba(0, 0, 0, 0.9);
+        #imageModal .modal-panel {
+            background-color: rgba(0,0,0,0.9);
             border-radius: 0.75rem;
         }
         #imageModal img {
@@ -169,182 +128,212 @@
             max-width: 90vw;
             object-fit: contain;
         }
+
+        @media (max-width: 768px) {
+            nav { height: 64px; }
+            .page-wrapper { padding-top: calc(64px + 24px); }
+            .desktop-back-btn { display: none; }
+            .mobile-home-wrapper { display: inline-flex; }
+        }
+        @media (min-width: 769px) {
+            nav { height: 80px; }
+            .page-wrapper { padding-top: calc(80px + 24px); }
+            .desktop-back-btn { display: inline-block; }
+            .mobile-home-wrapper { display: none; }
+        }
     </style>
 </head>
-<body class="h-screen overflow-y-auto">
+<body>
 
-    <nav class="fixed top-0 left-0 w-full flex justify-between items-center p-6 text-white font-semibold bg-transparent">
-        <a href="#" class="logo-link">
-            <img src="{% static 'img/ETC_LOGO.png' %}" alt="Logo"> E.T.C. CAM
+<nav class="fixed top-0 left-0 w-full nav-bg text-white z-40 shadow-md flex items-center">
+    <div class="flex items-center w-full max-w-6xl mx-auto px-4 md:px-8">
+        <a href="{% url 'dashboard_page' %}" class="flex items-center gap-2">
+            <img src="{% static 'img/ETC_LOGO2.png' %}" class="nav-logo">
         </a>
-        <div class="nav-actions">
-            <a href="{% url 'dashboard_page' %}" class="back-button-text hover-effect bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700">{% trans "Back to Dashboard" %}</a>
-            <a href="{% url 'dashboard_page' %}" class="back-button-icon hover-effect">
-                <i class="fas fa-home"></i>
+
+        <div class="ml-auto flex items-center gap-3">
+            <!-- Desktop: text button -->
+            <a href="{% url 'dashboard_page' %}"
+               class="primary-btn desktop-back-btn">
+                <i class="fas fa-arrow-left mr-1"></i> {% trans "Back to Dashboard" %}
+            </a>
+
+            <!-- Mobile: home icon only -->
+            <a href="{% url 'dashboard_page' %}" class="mobile-home-wrapper">
+                <span class="home-icon-btn">
+                    <i class="fas fa-home"></i>
+                </span>
             </a>
         </div>
-    </nav>
+    </div>
+</nav>
 
-    <div class="transparent-header-spacer"></div>
-
-    <div class="container mx-auto mt-24 p-6">
-        <h1 class="text-center text-4xl font-bold mb-8">{% trans "LIST OF DISEASES AND THEIR DETAILS" %}</h1>
-        <p class="text-center text-lg mb-12">{% trans "CHOOSE WHAT KIND OF DISEASE YOU WANT TO KNOW." %}</p>
+<div class="page-wrapper">
+    <div class="max-w-6xl mx-auto px-4 md:px-8 py-8">
+        <h1 class="text-center text-3xl md:text-4xl font-extrabold mb-4 text-gray-800">
+            {% trans "LIST OF DISEASES AND THEIR DETAILS" %}
+        </h1>
+        <p class="text-center text-lg mb-10 text-gray-600">
+            {% trans "CHOOSE WHAT KIND OF DISEASE YOU WANT TO KNOW." %}
+        </p>
 
         {% for plant_entry in plants_with_diseases %}
-            <div class="mb-12">
-                <h2 class="text-2xl font-bold mb-6">{{ plant_entry.name }} {% trans "Diseases" %}</h2>
+            <div class="mb-10">
+                <h2 class="text-2xl font-bold mb-4 text-gray-800">
+                    {{ plant_entry.name }} {% trans "Diseases" %}
+                </h2>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
                     {% for disease in plant_entry.diseases %}
                         <div class="disease-card"
-                            onclick="showDiseaseDetails(
+                             onclick="showDiseaseDetails(
                                 '{{ disease.name|escapejs }}',
                                 '{{ disease.description|escapejs }}',
                                 '{{ disease.symptoms|escapejs }}',
                                 '{{ disease.prevention|escapejs }}',
-                                '{{ disease.image_url|default:""|escapejs }}'
-                            )">
+                                '{{ disease.image_url|default:''|escapejs }}'
+                             )">
                             {% if disease.image_url %}
-                                <img src="{{ disease.image_url }}" alt="{{ disease.name }}" class="w-full h-32 object-cover rounded-lg mb-3">
+                                <img src="{{ disease.image_url }}" alt="{{ disease.name }}"
+                                     class="w-full h-32 object-cover rounded-lg mb-3">
                             {% else %}
-                                <div class="w-full h-32 bg-gray-600 rounded-lg mb-3 flex items-center justify-center">
+                                <div class="w-full h-32 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
                                     <i class="fas fa-leaf text-gray-400 text-4xl"></i>
                                 </div>
                             {% endif %}
-                            <h3 class="text-xl font-bold">{{ disease.name }}</h3>
+                            <h3 class="text-xl font-bold text-gray-800">{{ disease.name }}</h3>
                         </div>
                     {% empty %}
-                        <p class="text-white text-lg">{% trans "No diseases listed for" %} {{ plant_entry.name }} {% trans "yet." %}</p>
+                        <p class="text-lg text-gray-700">
+                            {% trans "No diseases listed for" %} {{ plant_entry.name }} {% trans "yet." %}
+                        </p>
                     {% endfor %}
                 </div>
             </div>
         {% empty %}
-            <p class="text-white text-center text-xl mt-12">{% trans "No plant or disease data available yet." %}</p>
+            <p class="text-center text-xl mt-12 text-gray-700">
+                {% trans "No plant or disease data available yet." %}
+            </p>
         {% endfor %}
     </div>
+</div>
 
-    <!-- Disease Details Modal -->
-    <div id="diseaseModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center hidden">
-        <div class="bg-white p-8 rounded-lg text-black w-11/12 max-w-2xl max-h-screen overflow-y-auto">
-            <!-- Image section with View Image button -->
-            <div id="modalImageContainer" class="mb-4">
-                <img id="modalImage" src="" alt="" class="w-full h-48 object-cover rounded-lg mb-3 hidden">
-                <div id="modalImagePlaceholder" class="w-full h-48 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
-                    <i class="fas fa-leaf text-gray-400 text-6xl"></i>
-                </div>
-                <button id="viewImageBtn" onclick="viewFullImage()" class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors hidden">
-                    <i class="fas fa-expand mr-2"></i>{% trans "View Image" %}
-                </button>
+<!-- Disease Details Modal -->
+<div id="diseaseModal"
+     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="modal-panel p-8 w-11/12 max-w-2xl max-h-screen overflow-y-auto">
+        <div id="modalImageContainer" class="mb-4">
+            <img id="modalImage" src="" alt=""
+                 class="w-full h-48 object-cover rounded-lg mb-3 hidden">
+            <div id="modalImagePlaceholder"
+                 class="w-full h-48 bg-gray-200 rounded-lg mb-3 flex items-center justify-center">
+                <i class="fas fa-leaf text-gray-400 text-6xl"></i>
             </div>
-            
-            <h2 id="modalTitle" class="text-2xl font-bold mb-4"></h2>
-
-            <h3 class="text-xl font-bold mt-4 mb-2">{% trans "Description" %}:</h3>
-            <p id="modalDescription" class="text-lg mb-4"></p>
-
-            <h3 class="text-xl font-bold mt-4 mb-2">{% trans "Symptoms" %}:</h3>
-            <p id="modalSymptoms" class="text-lg mb-4"></p>
-
-            <h3 class="text-xl font-bold mt-4 mb-2">{% trans "Prevention" %}:</h3>
-            <p id="modalPrevention" class="text-lg mb-4"></p>
-
-            <button onclick="closeModal()" class="mt-6 bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700">{% trans "Close" %}</button>
+            <button id="viewImageBtn" onclick="viewFullImage()"
+                    class="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors hidden">
+                <i class="fas fa-expand mr-2"></i>{% trans "View Image" %}
+            </button>
         </div>
-    </div>
 
-    <!-- Full Image Modal -->
-    <div id="imageModal" class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-90 flex items-center justify-center hidden">
-        <div class="bg-white p-4 rounded-lg max-w-11/12 max-h-11/12">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-black">{% trans "Disease Image" %}</h3>
-                <button onclick="closeImageModal()" class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <img id="fullImage" src="" alt="" class="max-w-full max-h-full object-contain">
+        <h2 id="modalTitle" class="text-2xl font-bold mb-4"></h2>
+
+        <h3 class="text-xl font-bold mt-4 mb-2">{% trans "Description" %}:</h3>
+        <p id="modalDescription" class="text-lg mb-4"></p>
+
+        <h3 class="text-xl font-bold mt-4 mb-2">{% trans "Symptoms" %}:</h3>
+        <p id="modalSymptoms" class="text-lg mb-4"></p>
+
+        <h3 class="text-xl font-bold mt-4 mb-2">{% trans "Prevention" %}:</h3>
+        <p id="modalPrevention" class="text-lg mb-4"></p>
+
+        <button onclick="closeModal()"
+                class="mt-6 bg-green-600 text-white px-6 py-2 rounded shadow hover:bg-green-700">
+            {% trans "Close" %}
+        </button>
+    </div>
+</div>
+
+<!-- Full Image Modal -->
+<div id="imageModal"
+     class="fixed inset-0 bg-black bg-opacity-90 flex items-center justify-center hidden z-50">
+    <div class="modal-panel p-4 max-w-5xl w-11/12">
+        <div class="flex justify-between items-center mb-4">
+            <h3 class="text-xl font-bold text-white">{% trans "Disease Image" %}</h3>
+            <button onclick="closeImageModal()"
+                    class="bg-red-600 text-white px-4 py-2 rounded hover:bg-red-700">
+                <i class="fas fa-times"></i>
+            </button>
         </div>
+        <img id="fullImage" src="" alt="" class="max-w-full max-h-[80vh] object-contain">
     </div>
+</div>
 
-    <script>
-        let currentImageUrl = '';
+<script>
+    let currentImageUrl = '';
 
-        function showDiseaseDetails(diseaseName, diseaseDescription, diseaseSymptoms, diseasePrevention, diseaseImageUrl) {
-            const modal = document.getElementById('diseaseModal');
-            const modalTitle = document.getElementById('modalTitle');
-            const modalDescription = document.getElementById('modalDescription');
-            const modalSymptoms = document.getElementById('modalSymptoms');
-            const modalPrevention = document.getElementById('modalPrevention');
-            const modalImage = document.getElementById('modalImage');
-            const modalImagePlaceholder = document.getElementById('modalImagePlaceholder');
-            const viewImageBtn = document.getElementById('viewImageBtn');
+    function showDiseaseDetails(name, description, symptoms, prevention, imageUrl) {
+        const modal = document.getElementById('diseaseModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalDescription = document.getElementById('modalDescription');
+        const modalSymptoms = document.getElementById('modalSymptoms');
+        const modalPrevention = document.getElementById('modalPrevention');
+        const modalImage = document.getElementById('modalImage');
+        const modalImagePlaceholder = document.getElementById('modalImagePlaceholder');
+        const viewImageBtn = document.getElementById('viewImageBtn');
 
-            modalTitle.textContent = diseaseName;
-            
-            // Handle empty content with appropriate messages
-            modalDescription.textContent = diseaseDescription || "{% trans 'No description available.' %}";
-            modalSymptoms.textContent = diseaseSymptoms || "{% trans 'No symptoms listed.' %}";
-            modalPrevention.textContent = diseasePrevention || "{% trans 'No prevention methods listed.' %}";
+        modalTitle.textContent = name;
+        modalDescription.textContent = description || "{% trans 'No description available.' %}";
+        modalSymptoms.textContent = symptoms || "{% trans 'No symptoms listed.' %}";
+        modalPrevention.textContent = prevention || "{% trans 'No prevention methods listed.' %}";
 
-            // Handle image display
-            if (diseaseImageUrl) {
-                modalImage.src = diseaseImageUrl;
-                modalImage.alt = diseaseName;
-                modalImage.classList.remove('hidden');
-                modalImagePlaceholder.classList.add('hidden');
-                viewImageBtn.classList.remove('hidden');
-                currentImageUrl = diseaseImageUrl;
-            } else {
-                modalImage.classList.add('hidden');
-                modalImagePlaceholder.classList.remove('hidden');
-                viewImageBtn.classList.add('hidden');
-                currentImageUrl = '';
-            }
-
-            modal.classList.remove('hidden');
-        }
-
-        function viewFullImage() {
-            if (currentImageUrl) {
-                const imageModal = document.getElementById('imageModal');
-                const fullImage = document.getElementById('fullImage');
-                
-                fullImage.src = currentImageUrl;
-                fullImage.alt = document.getElementById('modalTitle').textContent;
-                imageModal.classList.remove('hidden');
-            }
-        }
-
-        function closeModal() {
-            const modal = document.getElementById('diseaseModal');
-            modal.classList.add('hidden');
+        if (imageUrl) {
+            modalImage.src = imageUrl;
+            modalImage.alt = name;
+            modalImage.classList.remove('hidden');
+            modalImagePlaceholder.classList.add('hidden');
+            viewImageBtn.classList.remove('hidden');
+            currentImageUrl = imageUrl;
+        } else {
+            modalImage.classList.add('hidden');
+            modalImagePlaceholder.classList.remove('hidden');
+            viewImageBtn.classList.add('hidden');
             currentImageUrl = '';
         }
 
-        function closeImageModal() {
+        modal.classList.remove('hidden');
+    }
+
+    function viewFullImage() {
+        if (currentImageUrl) {
             const imageModal = document.getElementById('imageModal');
-            imageModal.classList.add('hidden');
+            const fullImage = document.getElementById('fullImage');
+            fullImage.src = currentImageUrl;
+            fullImage.alt = document.getElementById('modalTitle').textContent;
+            imageModal.classList.remove('hidden');
         }
+    }
 
-        // Close modals when clicking outside the content
-        document.getElementById('diseaseModal').addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeModal();
-            }
-        });
+    function closeModal() {
+        document.getElementById('diseaseModal').classList.add('hidden');
+        currentImageUrl = '';
+    }
 
-        document.getElementById('imageModal').addEventListener('click', function(event) {
-            if (event.target === this) {
-                closeImageModal();
-            }
-        });
+    function closeImageModal() {
+        document.getElementById('imageModal').classList.add('hidden');
+    }
 
-        // Close modals with Escape key
-        document.addEventListener('keydown', function(event) {
-            if (event.key === 'Escape') {
-                closeModal();
-                closeImageModal();
-            }
-        });
-    </script>
+    document.getElementById('diseaseModal').addEventListener('click', function (e) {
+        if (e.target === this) closeModal();
+    });
+    document.getElementById('imageModal').addEventListener('click', function (e) {
+        if (e.target === this) closeImageModal();
+    });
+
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') {
+            closeModal();
+            closeImageModal();
+        }
+    });
+</script>
 </body>
 </html>
