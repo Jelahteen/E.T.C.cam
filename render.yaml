@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: etccam-web-service 
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn etccam_project.wsgi:application --bind 0.0.0.0:$PORT --timeout 120"
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: DJANGO_SETTINGS_MODULE
+        value: etccam_project.settings
